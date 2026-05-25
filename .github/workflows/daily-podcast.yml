@@ -30,8 +30,11 @@ jobs:
           STORAGE_STATE_B64: ${{ secrets.NOTEBOOKLM_STORAGE_STATE }}
         run: |
           mkdir -p ~/.notebooklm/profiles/default
-          echo "$STORAGE_STATE_B64" | base64 -d > ~/.notebooklm/profiles/default/storage_state.json
+          printf '%s' "$STORAGE_STATE_B64" | tr -d '[:space:]' | base64 -d \
+            > ~/.notebooklm/profiles/default/storage_state.json
           chmod 600 ~/.notebooklm/profiles/default/storage_state.json
+          # サニティチェック: JSONとしてパース可能か
+          python -c "import json; json.load(open('$HOME/.notebooklm/profiles/default/storage_state.json'))"
 
       - name: Run podcast generation
         env:
