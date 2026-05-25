@@ -42,6 +42,18 @@ class NotebookLMAuthError(NotebookLMError):
     """セッション失効が疑われるエラー。即時終了→Discord通知の合図。"""
 
 
+class NotebookLMRateLimitError(NotebookLMError):
+    """NotebookLM 側のレートリミット（1日3回制限など）。
+
+    cron は翌日に勝手に再試行するので、これを上位で受け取った側は
+    exit 0 で正常終了するのが望ましい。
+    """
+
+    def __init__(self, message: str, retry_after: int | None = None):
+        super().__init__(message)
+        self.retry_after = retry_after
+
+
 def _resolve_storage_state_path() -> Path | None:
     """既存の storage_state.json のパスを返す。新パス優先、なければ旧。"""
     if STORAGE_STATE_PATH_NEW.exists():
@@ -126,10 +138,32 @@ def _raise_for_output(
         "session expired",
         "unauthorized",
     )
+    rate_limit_signals = (
+        "rate limited",
+        "rate-limited",
+        "rate_limited",
+        "rate limit exceeded",
+        "daily limit",
+        "quota exceeded",
+    )
     msg = (
         f"notebooklm command failed (exit {proc.returncode}): {' '.join(cmd)}\n"
         f"stdout: {proc.stdout}\nstderr: {proc.stderr}"
     )
+
+    # 構造化 JSON 受け答えの code フィールドを最優先で見る
+    code: str | None = None
+    retry_after: int | None = None
+    parsed = _try_parse_json(proc.stdout)
+    if isinstance(parsed, dict):
+        code_val = parsed.get("code")
+        if isinstance(code_val, str):
+            code = code_val.upper()
+        if isinstance(parsed.get("retry_after"), int):
+            retry_after = parsed["retry_after"]
+
+    if code == "RATE_LIMITED" or any(sig in combined for sig in rate_limit_signals):
+        raise NotebookLMRateLimitError(msg, retry_after=retry_after)
     if any(sig in combined for sig in auth_signals):
         raise NotebookLMAuthError(msg)
     raise NotebookLMError(msg)
@@ -289,7 +323,9 @@ def add_source(notebook_id: str, url: str) -> str | None:
                 "--json",
             ]
         )
-    except NotebookLMAuthError:
+    except (NotebookLMAuthError, NotebookLMRateLimitError):
+        # 認証失効・レートリミットは全 source で同じ失敗を繰り返すので
+        # ここで止めて上位に伝播させる
         raise
     except NotebookLMError as exc:
         logger.warning("failed to add source %s — skipping. %s", url, exc)

@@ -353,6 +353,84 @@ def test_generate_audio_raises_when_no_task_id_extractable(monkeypatch):
     assert len(runner.calls) == 1
 
 
+# ---- _raise_for_output: RATE_LIMITED 検出 --------------------------------
+
+
+def _make_proc(stdout: str = "", stderr: str = "", returncode: int = 1):
+    proc = subprocess.CompletedProcess(
+        args=["dummy"], returncode=returncode, stdout=stdout, stderr=stderr
+    )
+    return proc
+
+
+def test_raise_for_output_detects_rate_limited_by_code():
+    proc = _make_proc(
+        stdout='{"error": true, "code": "RATE_LIMITED", '
+        '"message": "Error: Rate limited. Retry after 3600s.", '
+        '"retry_after": 3600}',
+    )
+    with pytest.raises(generate_podcast.NotebookLMRateLimitError) as exc_info:
+        generate_podcast._raise_for_output(["notebooklm", "create"], proc)
+    assert exc_info.value.retry_after == 3600
+
+
+def test_raise_for_output_detects_rate_limited_by_message_text():
+    # code フィールドが無くてもメッセージから拾える（保険）
+    proc = _make_proc(stdout="", stderr="Error: rate-limited (HTTP 429)")
+    with pytest.raises(generate_podcast.NotebookLMRateLimitError) as exc_info:
+        generate_podcast._raise_for_output(["notebooklm", "x"], proc)
+    assert exc_info.value.retry_after is None
+
+
+def test_raise_for_output_rate_limit_takes_precedence_over_auth():
+    # 万一同じレスポンスに両方のシグナルが入っていた場合、
+    # rate limit が優先される（cron で翌日リトライさせるため）
+    proc = _make_proc(
+        stdout='{"code": "RATE_LIMITED", "message": "Auth not found"}'
+    )
+    with pytest.raises(generate_podcast.NotebookLMRateLimitError):
+        generate_podcast._raise_for_output(["notebooklm", "x"], proc)
+
+
+def test_raise_for_output_auth_error_still_works():
+    proc = _make_proc(
+        stdout='{"error": true, "code": "AUTH_REQUIRED", '
+        '"message": "Auth not found."}'
+    )
+    with pytest.raises(generate_podcast.NotebookLMAuthError):
+        generate_podcast._raise_for_output(["notebooklm", "x"], proc)
+
+
+def test_raise_for_output_generic_error_for_other_failures():
+    proc = _make_proc(
+        stdout='{"error": true, "code": "VALIDATION_ERROR", '
+        '"message": "bad input"}'
+    )
+    with pytest.raises(generate_podcast.NotebookLMError) as exc_info:
+        generate_podcast._raise_for_output(["notebooklm", "x"], proc)
+    # 親クラスではあるが、rate-limit / auth サブクラスではないことを確認
+    assert not isinstance(
+        exc_info.value, generate_podcast.NotebookLMRateLimitError
+    )
+    assert not isinstance(
+        exc_info.value, generate_podcast.NotebookLMAuthError
+    )
+
+
+# ---- add_source: rate limit を再 raise ----------------------------------
+
+
+def test_add_source_reraises_rate_limit(monkeypatch):
+    def fake_run(cmd, **kwargs):  # noqa: ARG001
+        raise generate_podcast.NotebookLMRateLimitError(
+            "Error: Rate limited.", retry_after=3600
+        )
+
+    monkeypatch.setattr(generate_podcast, "_run", fake_run)
+    with pytest.raises(generate_podcast.NotebookLMRateLimitError):
+        generate_podcast.add_source("nb-1", "https://arxiv.org/abs/x")
+
+
 # ---- restore_storage_state logging --------------------------------------
 
 

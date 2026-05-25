@@ -14,7 +14,7 @@ from src.fetch_arxiv import (
     load_published_ids,
     record_published_ids,
 )
-from src.generate_podcast import generate_audio_overview
+from src.generate_podcast import NotebookLMRateLimitError, generate_audio_overview
 from src.notify import notify
 from src.publish import publish_episode
 
@@ -31,13 +31,30 @@ def main() -> int:
         published_ids = load_published_ids()
         papers = fetch_latest_papers(exclude_published_ids=published_ids)
         if not papers:
-            notify(f"{today}: 該当論文0本のため生成スキップ")
+            logger.info("no fresh papers in adaptive window, skipping today")
+            notify(f"{today}: 📭 該当論文0本のため生成スキップ")
             return 0
 
         mp3_path = generate_audio_overview(papers, today)
         publish_episode(mp3_path, papers, today)
         record_published_ids([p.arxiv_id for p in papers])
         notify(f"{today}: ✅ {len(papers)}本のエピソード配信完了")
+        return 0
+
+    except NotebookLMRateLimitError as e:
+        # 1日3回制限などのレートリミット。cron が翌日再試行するので
+        # exit 0 で正常終了し、GitHub Actions の失敗通知を抑止する。
+        # 「論文0本」とはログ内容・絵文字とも別物に。
+        retry_hint = (
+            f"（retry_after={e.retry_after}s）" if e.retry_after else ""
+        )
+        logger.info(
+            "rate-limited by NotebookLM; cron will retry tomorrow%s", retry_hint
+        )
+        notify(
+            f"{today}: 🛑 NotebookLM の1日3回制限に到達。"
+            f"24時間後に再試行されます。{retry_hint}"
+        )
         return 0
 
     except Exception as e:
