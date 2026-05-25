@@ -1,0 +1,19 @@
+[project]
+name = "arxiv-podcast-bot"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "arxiv>=4.0.0",
+    "feedgen>=1.0.0",
+    "notebooklm-py[browser]>=0.5.0",
+    "requests>=2.33.1",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.3",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

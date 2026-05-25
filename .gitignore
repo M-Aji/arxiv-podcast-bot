@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# uv / venv
+.venv/
+venv/
+
+# Build artifacts (generated mp3, intermediate files)
+build/
+*.mp3
+
+# NotebookLM credentials — NEVER commit
+**/storage_state.json
+storage_state.json
+.notebooklm/
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+
+# Env files
+.env
+.env.local

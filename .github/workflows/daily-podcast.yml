@@ -1,0 +1,55 @@
+name: Daily arXiv Podcast
+
+on:
+  schedule:
+    - cron: '0 21 * * *'   # 21:00 UTC = 06:00 JST
+  workflow_dispatch:
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python with uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Install Playwright browsers
+        run: uv run playwright install chromium
+
+      - name: Restore NotebookLM session
+        env:
+          STORAGE_STATE_B64: ${{ secrets.NOTEBOOKLM_STORAGE_STATE }}
+        run: |
+          mkdir -p ~/.notebooklm
+          echo "$STORAGE_STATE_B64" | base64 -d > ~/.notebooklm/storage_state.json
+          chmod 600 ~/.notebooklm/storage_state.json
+
+      - name: Run podcast generation
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: uv run python -m src.main
+
+      - name: Commit RSS update
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add feed/podcast.xml state/published_papers.json
+          git diff --cached --quiet || git commit -m "Daily episode $(date +%Y-%m-%d)"
+          git push
+
+      - name: Notify on failure
+        if: failure()
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: uv run python -m src.notify "Daily podcast generation failed (run ${{ github.run_id }})"
