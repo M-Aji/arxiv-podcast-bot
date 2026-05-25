@@ -34,11 +34,17 @@ AUDIO_OVERVIEW_INSTRUCTION: str = (
     "不明な点はそう述べてください。"
 )
 
-# NotebookLM CLI 操作のタイムアウト・リトライ設定
+# NotebookLM CLI 操作のタイムアウト設定
 SOURCE_READY_POLL_INTERVAL_SECONDS: int = 10
 SOURCE_READY_TIMEOUT_SECONDS: int = 10 * 60
+
+# Audio 生成は 10〜20分かかる。`generate audio --wait --timeout 300` は
+# 短めに切り、タイムアウトで返って来たレスポンスから task_id を救出し
+# `artifact wait` で同じタスクを `AUDIO_WAIT_RETRY_TIMEOUT_SECONDS` まで
+# `AUDIO_WAIT_CHUNK_SECONDS` 刻みでポーリングする。決して再生成しない。
+AUDIO_INITIAL_WAIT_TIMEOUT_SECONDS: int = 300
+AUDIO_WAIT_CHUNK_SECONDS: int = 600
 AUDIO_WAIT_RETRY_TIMEOUT_SECONDS: int = 30 * 60
-GENERATE_AUDIO_MAX_RETRIES: int = 2
 
 # ---- Podcast メタデータ ---------------------------------------------------
 

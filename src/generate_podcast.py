@@ -8,6 +8,7 @@ import base64
 import json
 import logging
 import os
+import re
 import subprocess
 from datetime import date
 from pathlib import Path
@@ -207,6 +208,53 @@ def _extract_task_id(payload_or_stdout: dict | str) -> str | None:
     return None
 
 
+# `notebooklm-py/_artifact_polling.py:377` が投げる例外メッセージ:
+#   f"Task {task_id} timed out after {timeout}s (last status: {last_status})"
+# これが CLI の UNEXPECTED_ERROR envelope の `message` フィールドに乗る。
+# task_id は UUID（hex + dash）が一般的だが、念のため英数字+`-_` で広めに。
+_TASK_TIMEOUT_RE = re.compile(r"Task\s+([A-Za-z0-9_-]+)\s+timed out")
+
+
+def _extract_task_id_from_error(message: str | None) -> str | None:
+    """エラーメッセージ文字列に埋め込まれた task_id を正規表現で取り出す。"""
+    if not message:
+        return None
+    m = _TASK_TIMEOUT_RE.search(message)
+    return m.group(1) if m else None
+
+
+def _extract_task_id_from_response(
+    stdout: str, stderr: str = ""
+) -> str | None:
+    """generate audio のレスポンス全体から task_id を取り出す。
+
+    優先順:
+      1. payload["task_id"] (status:pending / status:completed の正常系)
+      2. payload["message"] 内のエラー文字列に埋め込まれた task_id
+      3. 最終手段として stdout+stderr 全体に対する正規表現マッチ
+    """
+    payload: object = None
+    if stdout:
+        try:
+            payload = json.loads(stdout)
+        except json.JSONDecodeError:
+            payload = None
+
+    if isinstance(payload, dict):
+        tid = _extract_task_id(payload)
+        if tid:
+            return tid
+        msg = payload.get("message")
+        if isinstance(msg, str):
+            tid = _extract_task_id_from_error(msg)
+            if tid:
+                return tid
+
+    # 最後の保険: stdout/stderr どこかにメッセージが転がっていれば拾う
+    combined = (stdout or "") + "\n" + (stderr or "")
+    return _extract_task_id_from_error(combined)
+
+
 def set_language(code: str = "ja") -> None:
     """日本語出力を保証する。冪等。"""
     _run([*_base_cmd(), "language", "set", code, "--local"], check=False)
@@ -288,70 +336,119 @@ def wait_for_source(notebook_id: str, source_id: str, *, timeout: int) -> bool:
 def generate_audio(
     notebook_id: str, instruction: str, *, language: str = "ja"
 ) -> None:
-    """Audio Overview を生成。タイムアウトしたら artifact wait で再待機。"""
-    last_exc: NotebookLMError | None = None
-    for attempt in range(1, config.GENERATE_AUDIO_MAX_RETRIES + 2):
-        cmd = [
+    """Audio Overview を生成し、完了を待つ。
+
+    NotebookLM の audio 生成は典型的に 10〜20 分かかる。`generate audio`
+    を1回だけ submit し、初回 --wait が短いタイムアウトで返ってきたら
+    レスポンス（あるいはエラーメッセージ）から task_id を救出して、
+    同じタスクを `artifact wait` で `AUDIO_WAIT_RETRY_TIMEOUT_SECONDS`
+    まで `AUDIO_WAIT_CHUNK_SECONDS` 刻みでポーリングする。
+
+    決して `generate audio` 自体を再投入しない（新タスクを作って
+    永遠に追いつけなくなるため）。
+    """
+    submit_cmd = [
+        *_base_cmd(),
+        "generate",
+        "audio",
+        instruction,
+        "--notebook",
+        notebook_id,
+        "--language",
+        language,
+        "--wait",
+        "--timeout",
+        str(config.AUDIO_INITIAL_WAIT_TIMEOUT_SECONDS),
+        "--json",
+    ]
+    proc = _run(
+        submit_cmd,
+        check=False,
+        timeout=config.AUDIO_INITIAL_WAIT_TIMEOUT_SECONDS + 100,
+    )
+
+    # 速攻で完了した場合（短い音声・キャッシュなど）
+    submit_payload = _try_parse_json(proc.stdout)
+    if (
+        proc.returncode == 0
+        and isinstance(submit_payload, dict)
+        and submit_payload.get("status") == "completed"
+    ):
+        logger.info(
+            "audio overview completed in initial wait (task=%s)",
+            _extract_task_id(submit_payload),
+        )
+        return
+
+    # task_id 抽出 (構造化 → エラーメッセージ正規表現)
+    task_id = _extract_task_id_from_response(proc.stdout, proc.stderr)
+    if not task_id:
+        # task_id が無いと再待機できない。auth エラーかその他の致命的失敗
+        _raise_for_output(submit_cmd, proc)
+
+    total_budget = config.AUDIO_WAIT_RETRY_TIMEOUT_SECONDS
+    chunk_size = config.AUDIO_WAIT_CHUNK_SECONDS
+    logger.info(
+        "audio task %s pending after %ds initial wait; polling up to %ds total",
+        task_id,
+        config.AUDIO_INITIAL_WAIT_TIMEOUT_SECONDS,
+        total_budget,
+    )
+
+    waited = 0
+    while waited < total_budget:
+        chunk = min(chunk_size, total_budget - waited)
+        wait_cmd = [
             *_base_cmd(),
-            "generate",
-            "audio",
-            instruction,
+            "artifact",
+            "wait",
+            task_id,
             "--notebook",
             notebook_id,
-            "--language",
-            language,
-            "--wait",
             "--timeout",
-            "300",
+            str(chunk),
             "--json",
         ]
-        proc = _run(cmd, check=False, timeout=400)
+        wait_proc = _run(wait_cmd, check=False, timeout=chunk + 60)
+        wait_payload = _try_parse_json(wait_proc.stdout)
+        status = (
+            wait_payload.get("status") if isinstance(wait_payload, dict) else None
+        )
 
-        if proc.returncode == 0:
-            logger.info("audio overview ready (attempt %d)", attempt)
+        if wait_proc.returncode == 0 and status == "completed":
+            logger.info(
+                "audio task %s completed (post-initial wait ~%ds)",
+                task_id,
+                waited + chunk,
+            )
             return
 
-        # --wait が300秒で切れた場合: task_id が出ていれば再待機を試す
-        task_id = _extract_task_id(proc.stdout)
-        if task_id:
+        if status == "timeout":
+            waited += chunk
             logger.info(
-                "generate exited but task %s exists; waiting up to %ds",
+                "audio task %s still pending after %ds (%ds remaining)",
                 task_id,
-                config.AUDIO_WAIT_RETRY_TIMEOUT_SECONDS,
+                waited,
+                total_budget - waited,
             )
-            wait_proc = _run(
-                [
-                    *_base_cmd(),
-                    "artifact",
-                    "wait",
-                    task_id,
-                    "--notebook",
-                    notebook_id,
-                    "--timeout",
-                    str(config.AUDIO_WAIT_RETRY_TIMEOUT_SECONDS),
-                ],
-                check=False,
-                timeout=config.AUDIO_WAIT_RETRY_TIMEOUT_SECONDS + 60,
-            )
-            if wait_proc.returncode == 0:
-                return
+            continue
 
-        try:
-            _raise_for_output(cmd, proc)
-        except NotebookLMAuthError:
-            raise
-        except NotebookLMError as exc:
-            last_exc = exc
-            logger.warning(
-                "generate audio failed on attempt %d/%d: %s",
-                attempt,
-                config.GENERATE_AUDIO_MAX_RETRIES + 1,
-                exc,
-            )
+        # 認証失効・サーバ側失敗・JSON 不正など — リトライしても無駄
+        _raise_for_output(wait_cmd, wait_proc)
 
     raise NotebookLMError(
-        f"generate audio failed after {config.GENERATE_AUDIO_MAX_RETRIES + 1} attempts"
-    ) from last_exc
+        f"audio task {task_id} did not complete within "
+        f"{total_budget}s post-initial wait; NotebookLM may be stuck"
+    )
+
+
+def _try_parse_json(stdout: str) -> object | None:
+    if not stdout:
+        return None
+    try:
+        return json.loads(stdout)
+    except json.JSONDecodeError:
+        return None
 
 
 def download_audio(notebook_id: str, output_path: Path) -> Path:

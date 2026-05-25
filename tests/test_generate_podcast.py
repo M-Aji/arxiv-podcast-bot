@@ -150,6 +150,209 @@ def test_add_source_parses_new_nested_response(monkeypatch):
     assert generate_podcast.add_source("nb-1", "https://arxiv.org/abs/x") == "src-1"
 
 
+# ---- _extract_task_id_from_error -----------------------------------------
+
+
+def test_extract_task_id_from_error_matches_real_format():
+    msg = (
+        "Unexpected error: Task abc-123-def timed out after 300.0s "
+        "(last status: in_progress)"
+    )
+    assert generate_podcast._extract_task_id_from_error(msg) == "abc-123-def"
+
+
+def test_extract_task_id_from_error_matches_uuid():
+    uuid = "9527f563-3b20-40fe-8544-290216b98fb7"
+    msg = f"Task {uuid} timed out after 300.0s (last status: pending)"
+    assert generate_podcast._extract_task_id_from_error(msg) == uuid
+
+
+def test_extract_task_id_from_error_returns_none_for_no_match():
+    assert generate_podcast._extract_task_id_from_error("") is None
+    assert generate_podcast._extract_task_id_from_error(None) is None
+    assert (
+        generate_podcast._extract_task_id_from_error("Some other error") is None
+    )
+
+
+# ---- _extract_task_id_from_response --------------------------------------
+
+
+def test_extract_task_id_from_response_prefers_structured_field():
+    stdout = '{"task_id": "from-struct", "status": "pending"}'
+    assert (
+        generate_podcast._extract_task_id_from_response(stdout) == "from-struct"
+    )
+
+
+def test_extract_task_id_from_response_extracts_from_error_message():
+    stdout = (
+        '{"error": true, "code": "UNEXPECTED_ERROR", '
+        '"message": "Unexpected error: Task tsk-xyz timed out after 300.0s '
+        '(last status: in_progress)"}'
+    )
+    assert (
+        generate_podcast._extract_task_id_from_response(stdout) == "tsk-xyz"
+    )
+
+
+def test_extract_task_id_from_response_falls_back_to_stderr():
+    stdout = "not json output"
+    stderr = "ERROR: Task tsk-stderr timed out after 300.0s"
+    assert (
+        generate_podcast._extract_task_id_from_response(stdout, stderr)
+        == "tsk-stderr"
+    )
+
+
+def test_extract_task_id_from_response_returns_none_when_unrecoverable():
+    assert generate_podcast._extract_task_id_from_response("") is None
+    assert (
+        generate_podcast._extract_task_id_from_response(
+            '{"error": true, "message": "Some other error"}'
+        )
+        is None
+    )
+
+
+# ---- generate_audio: 新挙動の網羅 -----------------------------------------
+
+
+class _SequenceRunner:
+    """`_run` を順序付きで差し替えるためのモック。各呼び出しの cmd を記録する。"""
+
+    def __init__(self, *procs: _FakeProc):
+        self._procs = list(procs)
+        self.calls: list[list[str]] = []
+
+    def __call__(self, cmd, **kwargs):  # noqa: ARG002
+        self.calls.append(list(cmd))
+        assert self._procs, f"unexpected extra _run call: {cmd}"
+        return self._procs.pop(0)
+
+
+def _patch_run(monkeypatch, *procs: _FakeProc) -> _SequenceRunner:
+    runner = _SequenceRunner(*procs)
+    monkeypatch.setattr(generate_podcast, "_run", runner)
+    return runner
+
+
+def test_generate_audio_completes_in_initial_wait(monkeypatch):
+    runner = _patch_run(
+        monkeypatch,
+        _FakeProc(
+            stdout='{"task_id": "tsk-1", "status": "completed", "url": "https://x/y"}',
+            returncode=0,
+        ),
+    )
+    generate_podcast.generate_audio("nb-1", "instr")
+    # generate audio 1回だけ
+    assert len(runner.calls) == 1
+    assert "generate" in runner.calls[0] and "audio" in runner.calls[0]
+
+
+def test_generate_audio_polls_same_task_until_completion(monkeypatch):
+    # 初回 generate audio は UNEXPECTED_ERROR(タイムアウト) で返る
+    timeout_error = _FakeProc(
+        stdout='{"error": true, "code": "UNEXPECTED_ERROR", '
+        '"message": "Unexpected error: Task tsk-stuck timed out after 300.0s '
+        '(last status: in_progress)"}',
+        returncode=1,
+    )
+    # 続く artifact wait は2回タイムアウトしてから3回目で完了
+    pending1 = _FakeProc(
+        stdout='{"artifact_id": "tsk-stuck", "status": "timeout", '
+        '"error": "Timed out after 600 seconds"}',
+        returncode=1,
+    )
+    pending2 = _FakeProc(
+        stdout='{"artifact_id": "tsk-stuck", "status": "timeout", '
+        '"error": "Timed out after 600 seconds"}',
+        returncode=1,
+    )
+    done = _FakeProc(
+        stdout='{"artifact_id": "tsk-stuck", "status": "completed", '
+        '"url": "https://audio/done", "error": null}',
+        returncode=0,
+    )
+    runner = _patch_run(monkeypatch, timeout_error, pending1, pending2, done)
+
+    generate_podcast.generate_audio("nb-1", "instr")
+
+    # 1: generate audio, 2-4: artifact wait (all on same task_id)
+    assert len(runner.calls) == 4
+    assert "generate" in runner.calls[0] and "audio" in runner.calls[0]
+    for c in runner.calls[1:]:
+        assert "artifact" in c and "wait" in c
+        assert "tsk-stuck" in c
+    # 同じ generate audio を二度と呼ばない
+    assert sum(1 for c in runner.calls if "generate" in c) == 1
+
+
+def test_generate_audio_gives_up_after_total_budget(monkeypatch):
+    # チャンク 600s、総予算 1800s → 3回 wait → タイムアウト確定
+    monkeypatch.setattr(generate_podcast.config, "AUDIO_WAIT_CHUNK_SECONDS", 600)
+    monkeypatch.setattr(
+        generate_podcast.config, "AUDIO_WAIT_RETRY_TIMEOUT_SECONDS", 1800
+    )
+    timeout_error = _FakeProc(
+        stdout='{"error": true, "code": "UNEXPECTED_ERROR", '
+        '"message": "Task tsk-zombie timed out after 300.0s"}',
+        returncode=1,
+    )
+    pending = lambda: _FakeProc(  # noqa: E731
+        stdout='{"artifact_id": "tsk-zombie", "status": "timeout"}',
+        returncode=1,
+    )
+    runner = _patch_run(
+        monkeypatch, timeout_error, pending(), pending(), pending()
+    )
+
+    with pytest.raises(
+        generate_podcast.NotebookLMError, match="did not complete"
+    ) as exc_info:
+        generate_podcast.generate_audio("nb-1", "instr")
+
+    assert "tsk-zombie" in str(exc_info.value)
+    # initial + 3 chunks (1800 / 600 = 3)
+    assert len(runner.calls) == 4
+
+
+def test_generate_audio_aborts_on_real_failure(monkeypatch):
+    # task_id は取れる、しかし wait が status=failed を返す → リトライしない
+    timeout_error = _FakeProc(
+        stdout='{"error": true, "code": "UNEXPECTED_ERROR", '
+        '"message": "Task tsk-fail timed out after 300.0s"}',
+        returncode=1,
+    )
+    failure = _FakeProc(
+        stdout='{"artifact_id": "tsk-fail", "status": "failed", '
+        '"error": "server-side generation error"}',
+        returncode=1,
+    )
+    runner = _patch_run(monkeypatch, timeout_error, failure)
+
+    with pytest.raises(generate_podcast.NotebookLMError):
+        generate_podcast.generate_audio("nb-1", "instr")
+    # 1 generate + 1 wait のみ、status=failed で即座に諦める
+    assert len(runner.calls) == 2
+
+
+def test_generate_audio_raises_when_no_task_id_extractable(monkeypatch):
+    # auth error などで task_id がそもそも見えないケース
+    auth_error = _FakeProc(
+        stdout='{"error": true, "code": "AUTH_REQUIRED", '
+        '"message": "Auth not found. Run notebooklm login first."}',
+        returncode=1,
+    )
+    runner = _patch_run(monkeypatch, auth_error)
+
+    with pytest.raises(generate_podcast.NotebookLMAuthError):
+        generate_podcast.generate_audio("nb-1", "instr")
+    # artifact wait は呼ばれない
+    assert len(runner.calls) == 1
+
+
 # ---- restore_storage_state logging --------------------------------------
 
 
