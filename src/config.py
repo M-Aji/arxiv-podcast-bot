@@ -38,15 +38,15 @@ PODCAST_TITLE: str = "Daily arXiv Digest (JP)"
 PODCAST_DESCRIPTION: str = (
     "毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。"
 )
-PODCAST_AUTHOR: str = "Your Name"
+PODCAST_AUTHOR: str = "M-Aji"
 PODCAST_LANGUAGE: str = "ja"
 PODCAST_CATEGORY: str = "Technology"
-PODCAST_IMAGE_URL: str = "https://yourname.github.io/arxiv-podcast-bot/cover.png"
+PODCAST_IMAGE_URL: str = "https://m-aji.github.io/arxiv-podcast-bot/cover.png"
 
 # ---- 配信 -----------------------------------------------------------------
 
-GITHUB_REPO: str = "yourname/arxiv-podcast-bot"
-GITHUB_PAGES_BASE_URL: str = "https://yourname.github.io/arxiv-podcast-bot"
+GITHUB_REPO: str = "M-Aji/arxiv-podcast-bot"
+GITHUB_PAGES_BASE_URL: str = "https://m-aji.github.io/arxiv-podcast-bot"
 
 # RSS 保持エピソード上限
 MAX_EPISODES_IN_FEED: int = 100
