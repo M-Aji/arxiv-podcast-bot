@@ -27,10 +27,10 @@ uv run notebooklm doctor
 ./scripts/export_storage_state.sh
 ```
 
-スクリプトが探すデフォルトパスは `~/.notebooklm/storage_state.json`。CLI 既定の `~/.notebooklm/profiles/default/storage_state.json` を使っている場合は明示指定：
+スクリプトは新パス `~/.notebooklm/profiles/default/storage_state.json` を優先的に探し、見つからなければ旧パス `~/.notebooklm/storage_state.json` をフォールバックで使う。別の場所に置いている場合は明示指定：
 
 ```bash
-./scripts/export_storage_state.sh ~/.notebooklm/profiles/default/storage_state.json
+./scripts/export_storage_state.sh /path/to/storage_state.json
 ```
 
 ### 4. GitHub の Secret を更新

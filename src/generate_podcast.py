@@ -18,10 +18,16 @@ from src.fetch_arxiv import ArxivPaper
 
 logger = logging.getLogger(__name__)
 
-# storage_state.json の復元先。CLI 既定の profile dir でなく固定パスを
-# 使い、`--storage` で明示的に指定する。GitHub Actions 環境でも
-# ローカルでも同じ振る舞いになる。
-STORAGE_STATE_PATH = Path.home() / ".notebooklm" / "storage_state.json"
+# storage_state.json の保存場所。
+# 新しい notebooklm-py は profile dir 配下を既定とするが、旧バージョン
+# でログイン済みのユーザーは旧パスに置いてある。両方を見て、新パスを優先。
+STORAGE_STATE_PATH_NEW = (
+    Path.home() / ".notebooklm" / "profiles" / "default" / "storage_state.json"
+)
+STORAGE_STATE_PATH_OLD = Path.home() / ".notebooklm" / "storage_state.json"
+
+# 後方互換: 旧コードが import している場合に備えて、新パスを既定値に。
+STORAGE_STATE_PATH = STORAGE_STATE_PATH_NEW
 
 # 環境変数名（base64 エンコードされた storage_state.json を期待）
 STORAGE_STATE_ENV = "NOTEBOOKLM_STORAGE_STATE"
@@ -35,30 +41,43 @@ class NotebookLMAuthError(NotebookLMError):
     """セッション失効が疑われるエラー。即時終了→Discord通知の合図。"""
 
 
+def _resolve_storage_state_path() -> Path | None:
+    """既存の storage_state.json のパスを返す。新パス優先、なければ旧。"""
+    if STORAGE_STATE_PATH_NEW.exists():
+        return STORAGE_STATE_PATH_NEW
+    if STORAGE_STATE_PATH_OLD.exists():
+        return STORAGE_STATE_PATH_OLD
+    return None
+
+
 def restore_storage_state(
-    env_var: str = STORAGE_STATE_ENV, path: Path = STORAGE_STATE_PATH
+    env_var: str = STORAGE_STATE_ENV, path: Path | None = None
 ) -> Path | None:
     """環境変数から base64 を取り出して storage_state.json に書き戻す。
 
+    書き出し先は新パス（`~/.notebooklm/profiles/default/storage_state.json`）。
     未設定なら何もしない（ローカルで `notebooklm login` 済みの想定）。
     """
     encoded = os.environ.get(env_var)
     if not encoded:
         logger.info("%s is not set — using existing local credentials", env_var)
         return None
-    path.parent.mkdir(parents=True, exist_ok=True)
+    target = path or STORAGE_STATE_PATH_NEW
+    target.parent.mkdir(parents=True, exist_ok=True)
     decoded = base64.b64decode(encoded.strip())
-    path.write_bytes(decoded)
-    path.chmod(0o600)
-    logger.info("restored storage state to %s (%d bytes)", path, len(decoded))
-    return path
+    target.write_bytes(decoded)
+    target.chmod(0o600)
+    logger.info("restored storage state to %s (%d bytes)", target, len(decoded))
+    return target
 
 
 def _base_cmd() -> list[str]:
     """全 notebooklm 呼び出しに共通の prefix。"""
     cmd = ["uv", "run", "notebooklm"]
-    if STORAGE_STATE_PATH.exists():
-        cmd.extend(["--storage", str(STORAGE_STATE_PATH)])
+    storage = _resolve_storage_state_path()
+    if storage:
+        cmd.extend(["--storage", str(storage)])
+        logger.debug("using storage_state at %s", storage)
     return cmd
 
 

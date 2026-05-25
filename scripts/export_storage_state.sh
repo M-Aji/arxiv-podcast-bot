@@ -1,13 +1,31 @@
 #!/bin/bash
 # storage_state.json を base64 化してクリップボードに送る。
 # GitHub の NOTEBOOKLM_STORAGE_STATE secret に貼り付けて使う。
+#
+# 引数で明示指定がなければ、新パス（profile dir 配下）→ 旧パスの順で探す。
 set -euo pipefail
 
-STATE_FILE="${1:-$HOME/.notebooklm/storage_state.json}"
-if [ ! -f "$STATE_FILE" ]; then
-  echo "❌ $STATE_FILE が見つかりません。先に 'uv run notebooklm login' を実行してください。" >&2
+NEW_PATH="$HOME/.notebooklm/profiles/default/storage_state.json"
+OLD_PATH="$HOME/.notebooklm/storage_state.json"
+
+if [ "${1:-}" != "" ]; then
+  STATE_FILE="$1"
+elif [ -f "$NEW_PATH" ]; then
+  STATE_FILE="$NEW_PATH"
+elif [ -f "$OLD_PATH" ]; then
+  STATE_FILE="$OLD_PATH"
+  echo "⚠ 旧パスを検出: $OLD_PATH" >&2
+  echo "  notebooklm-py の新バージョンは $NEW_PATH を使います。" >&2
+else
+  echo "❌ storage_state.json が見つかりません。" >&2
+  echo "   探した場所:" >&2
+  echo "     $NEW_PATH" >&2
+  echo "     $OLD_PATH" >&2
+  echo "   先に 'uv run notebooklm login' を実行してください。" >&2
   exit 1
 fi
+
+echo "→ $STATE_FILE を base64 化します"
 
 case "$(uname -s)" in
   Darwin)
