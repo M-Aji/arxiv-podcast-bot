@@ -56,11 +56,23 @@ def restore_storage_state(
     """環境変数から base64 を取り出して storage_state.json に書き戻す。
 
     書き出し先は新パス（`~/.notebooklm/profiles/default/storage_state.json`）。
-    未設定なら何もしない（ローカルで `notebooklm login` 済みの想定）。
+    環境変数が無ければ、実ファイルの存在を確認してログに出す（無い場合は
+    `notebooklm login` が未実行）。
     """
     encoded = os.environ.get(env_var)
     if not encoded:
-        logger.info("%s is not set — using existing local credentials", env_var)
+        existing = _resolve_storage_state_path()
+        if existing:
+            logger.info("using existing storage_state at %s", existing)
+        else:
+            logger.warning(
+                "no storage_state.json found at %s nor %s; "
+                "subsequent notebooklm CLI calls will fail. "
+                "Run `uv run notebooklm login` or set %s.",
+                STORAGE_STATE_PATH_NEW,
+                STORAGE_STATE_PATH_OLD,
+                env_var,
+            )
         return None
     target = path or STORAGE_STATE_PATH_NEW
     target.parent.mkdir(parents=True, exist_ok=True)
@@ -129,6 +141,72 @@ def _parse_json(stdout: str) -> dict:
         raise NotebookLMError(f"could not parse JSON: {stdout!r}") from exc
 
 
+# ---- レスポンスID抽出ヘルパー --------------------------------------------
+#
+# notebooklm-py CLI の `--json` レスポンスは新バージョンでネスト化された:
+#
+#   create   →  {"notebook": {"id": ...}, "active_notebook_id": ...}
+#   source   →  {"source":   {"id": ...}}
+#   audio    →  {"task_id": ..., "status": "completed", "url": ...}
+#
+# ID 取得は「新ネスト構造 → active_*_id → フラット (旧)」の順でフォールバック
+# し、CLI のマイナーバージョン差を吸収する。
+
+
+def _extract_notebook_id(payload: dict) -> str | None:
+    """create / use の response から notebook id を抽出。"""
+    if not isinstance(payload, dict):
+        return None
+    notebook = payload.get("notebook")
+    if isinstance(notebook, dict) and isinstance(notebook.get("id"), str):
+        return notebook["id"]
+    if isinstance(payload.get("active_notebook_id"), str):
+        return payload["active_notebook_id"]
+    for key in ("notebook_id", "id"):
+        val = payload.get(key)
+        if isinstance(val, str):
+            return val
+    return None
+
+
+def _extract_source_id(payload: dict) -> str | None:
+    """source add の response から source id を抽出。"""
+    if not isinstance(payload, dict):
+        return None
+    source = payload.get("source")
+    if isinstance(source, dict) and isinstance(source.get("id"), str):
+        return source["id"]
+    for key in ("source_id", "id"):
+        val = payload.get(key)
+        if isinstance(val, str):
+            return val
+    return None
+
+
+def _extract_task_id(payload_or_stdout: dict | str) -> str | None:
+    """generate audio / artifact wait の response から task_id を抽出。"""
+    payload: object
+    if isinstance(payload_or_stdout, str):
+        try:
+            payload = json.loads(payload_or_stdout)
+        except json.JSONDecodeError:
+            return None
+    else:
+        payload = payload_or_stdout
+    if not isinstance(payload, dict):
+        return None
+    if isinstance(payload.get("task_id"), str):
+        return payload["task_id"]
+    artifact = payload.get("artifact")
+    if isinstance(artifact, dict) and isinstance(artifact.get("id"), str):
+        return artifact["id"]
+    for key in ("artifact_id", "id"):
+        val = payload.get(key)
+        if isinstance(val, str):
+            return val
+    return None
+
+
 def set_language(code: str = "ja") -> None:
     """日本語出力を保証する。冪等。"""
     _run([*_base_cmd(), "language", "set", code, "--local"], check=False)
@@ -138,11 +216,7 @@ def create_notebook(title: str) -> str:
     """ノートブックを作って current context にし、ID を返す。"""
     proc = _run([*_base_cmd(), "create", title, "--use", "--json"])
     payload = _parse_json(proc.stdout)
-    notebook_id = (
-        payload.get("id")
-        or payload.get("notebook_id")
-        or payload.get("data", {}).get("id")
-    )
+    notebook_id = _extract_notebook_id(payload)
     if not notebook_id:
         raise NotebookLMError(f"notebook id missing in create response: {payload}")
     logger.info("created notebook %s (%s)", notebook_id, title)
@@ -174,11 +248,7 @@ def add_source(notebook_id: str, url: str) -> str | None:
         return None
 
     payload = _parse_json(proc.stdout)
-    source_id = (
-        payload.get("id")
-        or payload.get("source_id")
-        or payload.get("data", {}).get("id")
-    )
+    source_id = _extract_source_id(payload)
     if not source_id:
         logger.warning("no source id in add response for %s: %s", url, payload)
         return None
@@ -241,12 +311,12 @@ def generate_audio(
             logger.info("audio overview ready (attempt %d)", attempt)
             return
 
-        # --wait が300秒で切れた場合: artifact_id が出ていれば再待機を試す
-        artifact_id = _extract_artifact_id(proc.stdout)
-        if artifact_id:
+        # --wait が300秒で切れた場合: task_id が出ていれば再待機を試す
+        task_id = _extract_task_id(proc.stdout)
+        if task_id:
             logger.info(
-                "generate exited but artifact %s exists; waiting up to %ds",
-                artifact_id,
+                "generate exited but task %s exists; waiting up to %ds",
+                task_id,
                 config.AUDIO_WAIT_RETRY_TIMEOUT_SECONDS,
             )
             wait_proc = _run(
@@ -254,7 +324,7 @@ def generate_audio(
                     *_base_cmd(),
                     "artifact",
                     "wait",
-                    artifact_id,
+                    task_id,
                     "--notebook",
                     notebook_id,
                     "--timeout",
@@ -282,22 +352,6 @@ def generate_audio(
     raise NotebookLMError(
         f"generate audio failed after {config.GENERATE_AUDIO_MAX_RETRIES + 1} attempts"
     ) from last_exc
-
-
-def _extract_artifact_id(stdout: str) -> str | None:
-    try:
-        payload = json.loads(stdout)
-    except json.JSONDecodeError:
-        return None
-    if isinstance(payload, dict):
-        return (
-            payload.get("artifact_id")
-            or payload.get("task_id")
-            or payload.get("id")
-            or payload.get("data", {}).get("artifact_id")
-            or payload.get("data", {}).get("task_id")
-        )
-    return None
 
 
 def download_audio(notebook_id: str, output_path: Path) -> Path:
