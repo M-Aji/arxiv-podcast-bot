@@ -9,7 +9,15 @@ from pathlib import Path
 # ---- arXiv 検索設定 -------------------------------------------------------
 
 ARXIV_CATEGORIES: list[str] = ["cs.AI", "cs.LG", "cs.CL"]
+
+# 取得ウィンドウ。最初は ARXIV_QUERY_DAYS で試し、取得本数が少ない場合は
+# 倍々に拡大して ARXIV_QUERY_DAYS_MAX まで再試行する。arXiv は土日に新着
+# 公開がない（金夜 ET → 土朝 UTC が最終バッチ）ため、月曜朝 UTC の実行は
+# 1日窓だとゼロ件になりがち。
 ARXIV_QUERY_DAYS: int = 1
+ARXIV_QUERY_DAYS_MAX: int = 14
+ARXIV_MIN_PAPERS: int = 5
+
 PAPERS_PER_EPISODE: int = 10
 EXCLUDE_KEYWORDS: list[str] = []
 
