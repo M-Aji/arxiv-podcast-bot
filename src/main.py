@@ -9,6 +9,7 @@ import sys
 from datetime import date
 
 from src import config
+from src.daily_archive import write_daily_archive
 from src.fetch_arxiv import (
     ArxivRateLimitError,
     fetch_latest_papers,
@@ -39,6 +40,16 @@ def main() -> int:
 
         ranked = rank_papers(papers)
         selected = select_top_n(ranked, config.PAPERS_PER_EPISODE)
+
+        # 候補プール全本をマークダウンで残す。書き出し失敗で本流は止めない。
+        try:
+            archive_path = write_daily_archive(
+                today, ranked, config.PAPERS_PER_EPISODE
+            )
+            logger.info("wrote daily archive: %s", archive_path)
+        except Exception as e:  # noqa: BLE001
+            logger.warning("failed to write daily archive: %s", e)
+
         mp3_path = generate_audio_overview(selected, today)
         publish_episode(mp3_path, selected, today)
         record_published_ids([p.arxiv_id for p in selected])

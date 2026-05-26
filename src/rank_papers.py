@@ -30,6 +30,7 @@ class RankedPaper:
     paper: ArxivPaper
     score: float
     rationale: str
+    japanese_title: str | None = None
 
 
 def _system_prompt() -> str:
@@ -44,8 +45,12 @@ def _system_prompt() -> str:
         "- 「スキップしたい/優先度低」に該当 → 0.0〜3.0\n"
         "- どれにも明確に当てはまらない → 3.0〜5.0\n"
         "\n"
+        "さらに、論文タイトルが英語の場合は自然な日本語訳も生成してください。\n"
+        "タイトルがすでに日本語の場合は japanese_title を null にしてください。\n"
+        "\n"
         "出力は厳密に以下のJSON形式のみ（前後に何も書かない）:\n"
-        '{"score": <float>, "rationale": "<日本語で1行、なぜこのスコアなのか>"}\n'
+        '{"score": <float>, "rationale": "<日本語で1行、なぜこのスコアなのか>",'
+        ' "japanese_title": "<日本語訳または null>"}\n'
         "\n"
         "プロファイル:\n"
         f"{config.INTEREST_PROFILE}"
@@ -66,11 +71,12 @@ def _extract_text(response) -> str:
     return "".join(parts).strip()
 
 
-def _parse_score_json(text: str) -> tuple[float, str]:
-    """`{"score": ..., "rationale": "..."}` を取り出す。
+def _parse_score_json(text: str) -> tuple[float, str, str | None]:
+    """`{"score": ..., "rationale": "...", "japanese_title": ...}` を取り出す。
 
     モデルが前後に余分な文字を付けたケースを許容するため、最初の `{` から
-    最後の `}` までを切り出してパースする。
+    最後の `}` までを切り出してパースする。`japanese_title` は不在・null・
+    空文字いずれの場合も None に正規化する。
     """
     start = text.find("{")
     end = text.rfind("}")
@@ -81,7 +87,13 @@ def _parse_score_json(text: str) -> tuple[float, str]:
     rationale = str(payload.get("rationale", "")).strip()
     # 0.0〜10.0 の範囲にクランプ
     score = max(0.0, min(10.0, score))
-    return score, rationale
+    raw_jp = payload.get("japanese_title")
+    if raw_jp is None:
+        japanese_title: str | None = None
+    else:
+        jp_str = str(raw_jp).strip()
+        japanese_title = jp_str or None
+    return score, rationale, japanese_title
 
 
 def _score_single_paper(client, paper: ArxivPaper) -> RankedPaper:
@@ -91,15 +103,20 @@ def _score_single_paper(client, paper: ArxivPaper) -> RankedPaper:
         try:
             response = client.messages.create(
                 model=config.RANKING_MODEL,
-                max_tokens=200,
+                max_tokens=400,
                 temperature=0.3,
                 timeout=config.RANKING_TIMEOUT_SECONDS,
                 system=_system_prompt(),
                 messages=[{"role": "user", "content": _user_prompt(paper)}],
             )
             text = _extract_text(response)
-            score, rationale = _parse_score_json(text)
-            return RankedPaper(paper=paper, score=score, rationale=rationale)
+            score, rationale, japanese_title = _parse_score_json(text)
+            return RankedPaper(
+                paper=paper,
+                score=score,
+                rationale=rationale,
+                japanese_title=japanese_title,
+            )
         except Exception as exc:  # noqa: BLE001 — API/parse どちらも捕捉
             last_error = exc
             if attempt < len(_RETRY_BACKOFFS):

@@ -32,6 +32,16 @@ def captured_notifies(monkeypatch):
     return captured
 
 
+@pytest.fixture(autouse=True)
+def _stub_daily_archive(monkeypatch, tmp_path):
+    """全テストで write_daily_archive が実ファイルを残さないよう tmp_path にリダイレクト。"""
+    monkeypatch.setattr(
+        main_module,
+        "write_daily_archive",
+        lambda *args, **kwargs: tmp_path / "archive.md",
+    )
+
+
 # ---- 正常系（参照点） -----------------------------------------------------
 
 

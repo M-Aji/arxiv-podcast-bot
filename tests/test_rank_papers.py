@@ -128,6 +128,62 @@ def test_parses_json_with_surrounding_noise(monkeypatch, _with_api_key):
     ranked = rank_papers.rank_papers(papers)
     assert ranked[0].score == 7.5
     assert ranked[0].rationale == "ok"
+    # japanese_title 不在は None に正規化される
+    assert ranked[0].japanese_title is None
+
+
+# ---- japanese_title 抽出 -------------------------------------------------
+
+
+def test_japanese_title_is_extracted_when_present(monkeypatch, _with_api_key):
+    papers = [_paper("p1", title="An English Paper Title")]
+    _script(
+        monkeypatch,
+        [
+            '{"score": 8.0, "rationale": "ok",'
+            ' "japanese_title": "英語論文のタイトル"}',
+        ],
+    )
+
+    ranked = rank_papers.rank_papers(papers)
+    assert ranked[0].japanese_title == "英語論文のタイトル"
+
+
+def test_japanese_title_null_falls_back_to_none(monkeypatch, _with_api_key):
+    papers = [_paper("p1")]
+    _script(
+        monkeypatch,
+        [
+            '{"score": 5.0, "rationale": "ok", "japanese_title": null}',
+        ],
+    )
+
+    ranked = rank_papers.rank_papers(papers)
+    assert ranked[0].japanese_title is None
+
+
+def test_japanese_title_empty_string_falls_back_to_none(
+    monkeypatch, _with_api_key
+):
+    papers = [_paper("p1")]
+    _script(
+        monkeypatch,
+        [
+            '{"score": 5.0, "rationale": "ok", "japanese_title": "   "}',
+        ],
+    )
+
+    ranked = rank_papers.rank_papers(papers)
+    assert ranked[0].japanese_title is None
+
+
+def test_japanese_title_missing_field_is_none(monkeypatch, _with_api_key):
+    """既存形式（japanese_title フィールドなし）も後方互換で動く。"""
+    papers = [_paper("p1")]
+    _script(monkeypatch, ['{"score": 5.0, "rationale": "ok"}'])
+
+    ranked = rank_papers.rank_papers(papers)
+    assert ranked[0].japanese_title is None
 
 
 # ---- 全件失敗フォールバック ----------------------------------------------
