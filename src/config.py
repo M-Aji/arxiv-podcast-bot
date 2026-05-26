@@ -8,7 +8,15 @@ from pathlib import Path
 
 # ---- arXiv 検索設定 -------------------------------------------------------
 
-ARXIV_CATEGORIES: list[str] = ["cs.AI", "cs.LG", "cs.CL"]
+ARXIV_CATEGORIES: list[str] = [
+    "cs.AI",          # Artificial Intelligence
+    "cs.LG",          # Machine Learning
+    "cs.CL",          # Computation and Language (NLP)
+    "cs.MA",          # Multi-Agent Systems
+    "cs.SI",          # Social and Information Networks
+    "cs.CY",          # Computers and Society
+    "physics.soc-ph", # Physics and Society
+]
 
 # 取得ウィンドウ。最初は ARXIV_QUERY_DAYS で試し、取得本数が少ない場合は
 # 倍々に拡大して ARXIV_QUERY_DAYS_MAX まで再試行する。arXiv は土日に新着
