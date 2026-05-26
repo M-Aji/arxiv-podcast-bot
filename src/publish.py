@@ -118,8 +118,23 @@ def update_rss(
 def commit_and_push(
     paths: Sequence[Path], today: date, *, dry_run: bool = False
 ) -> None:
-    """変更ファイルを stage → commit → push する。dry_run の場合は表示のみ。"""
-    paths_str = [str(p) for p in paths]
+    """変更ファイルを stage → commit → push する。dry_run の場合は表示のみ。
+
+    渡されたパスのうち実在するものだけを `git add` 対象にする。全パスが
+    不在なら何もしない（初回実行で `published_papers.json` がまだ無い等で
+    `git add` が exit 128 にならないように）。stage 後に変更が無ければ
+    commit/push もスキップする。
+    """
+    existing = [p for p in paths if Path(p).exists()]
+    missing = [p for p in paths if not Path(p).exists()]
+    for p in missing:
+        logger.info("skip non-existent path for git add: %s", p)
+
+    if not existing:
+        logger.info("no existing paths to stage — skipping commit")
+        return
+
+    paths_str = [str(p) for p in existing]
     if dry_run:
         logger.info("[dry-run] would `git add %s` and push", " ".join(paths_str))
         return

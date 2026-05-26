@@ -51,8 +51,10 @@ def main() -> int:
             logger.warning("failed to write daily archive: %s", e)
 
         mp3_path = generate_audio_overview(selected, today)
-        publish_episode(mp3_path, selected, today)
+        # publish_episode は published_papers.json をコミット対象に含めるため、
+        # 先に履歴ファイルを書き出してから publish する。
         record_published_ids([p.arxiv_id for p in selected])
+        publish_episode(mp3_path, selected, today)
         notify(
             f"{today}: ✅ 候補{len(papers)}本→上位{len(selected)}本でエピソード配信完了"
         )

@@ -68,6 +68,45 @@ def test_main_succeeds_with_papers(monkeypatch, captured_notifies, tmp_path):
     assert any("✅" in m and "2本" in m for m in captured_notifies)
 
 
+# ---- 順序: record_published_ids → publish_episode -------------------------
+
+
+def test_main_records_published_ids_before_publish(
+    monkeypatch, captured_notifies, tmp_path
+):
+    """publish_episode は published_papers.json をコミット対象に含めるため、
+    record_published_ids が必ず publish_episode より先に呼ばれる必要がある。
+    """
+    monkeypatch.setattr(main_module, "load_published_ids", lambda: set())
+    monkeypatch.setattr(
+        main_module,
+        "fetch_latest_papers",
+        lambda **kwargs: [_paper("p1"), _paper("p2")],
+    )
+    monkeypatch.setattr(
+        main_module,
+        "generate_audio_overview",
+        lambda papers, today: tmp_path / "episode.mp3",
+    )
+
+    call_order: list[str] = []
+    monkeypatch.setattr(
+        main_module,
+        "record_published_ids",
+        lambda ids: call_order.append("record"),
+    )
+    monkeypatch.setattr(
+        main_module,
+        "publish_episode",
+        lambda *args, **kwargs: call_order.append("publish"),
+    )
+
+    assert main_module.main() == 0
+    assert call_order == ["record", "publish"], (
+        f"record_published_ids must run before publish_episode, got: {call_order}"
+    )
+
+
 # ---- 「該当論文0本」スキップ -----------------------------------------------
 
 
