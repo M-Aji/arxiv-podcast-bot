@@ -54,6 +54,18 @@ class _FakeClient:
         return iter(self._results)
 
 
+class _RateLimitedClient:
+    """`results()` を呼ぶと arxiv.HTTPError を投げるフェイク。"""
+
+    def __init__(self, status: int = 429) -> None:
+        self._status = status
+
+    def results(self, search):  # noqa: ARG002 — match arxiv.Client signature
+        raise fetch_arxiv.arxiv.HTTPError(
+            "http://export.arxiv.org/api/query", retry=0, status=self._status
+        )
+
+
 def _install_fake_client(monkeypatch, results) -> list[int]:
     """`arxiv.Client` を fake に差し替え、呼ばれた回数を返す list を返す。"""
     call_count = [0]
@@ -61,6 +73,27 @@ def _install_fake_client(monkeypatch, results) -> list[int]:
     def factory(*args, **kwargs):  # noqa: ARG001
         call_count[0] += 1
         return _FakeClient(results)
+
+    monkeypatch.setattr(fetch_arxiv.arxiv, "Client", factory)
+    return call_count
+
+
+def _install_scripted_clients(monkeypatch, scripted: list) -> list[int]:
+    """各 `Client(...)` 呼び出しごとに `scripted` の要素を順に返す。
+
+    要素は `_FakeClient`/`_RateLimitedClient` インスタンスを直接書ける。
+    呼び出し回数のカウンタ list を返す。
+    """
+    call_count = [0]
+
+    def factory(*args, **kwargs):  # noqa: ARG001
+        idx = call_count[0]
+        call_count[0] += 1
+        if idx >= len(scripted):
+            raise AssertionError(
+                f"unexpected extra arxiv.Client call #{idx + 1}"
+            )
+        return scripted[idx]
 
     monkeypatch.setattr(fetch_arxiv.arxiv, "Client", factory)
     return call_count
@@ -273,6 +306,116 @@ def test_published_ids_roundtrip(tmp_path: Path):
 
     payload = json.loads(state_file.read_text(encoding="utf-8"))
     assert payload == {"ids": ["a", "b", "c"]}
+
+
+# ---- アプリ層レートリミットリトライ -------------------------------------
+
+
+def test_fetch_recovers_after_initial_429(monkeypatch, caplog):
+    # 1 回目 429 → 2 回目 (アプリ層リトライ) で成功
+    scripted = [
+        _RateLimitedClient(429),
+        _FakeClient([_make_result("p1")]),
+    ]
+    call_count = _install_scripted_clients(monkeypatch, scripted)
+
+    with caplog.at_level("WARNING", logger="src.fetch_arxiv"):
+        papers = fetch_arxiv.fetch_latest_papers(
+            categories=["cs.AI"],
+            n=5,
+            query_days=1,
+            query_days_max=1,
+            min_papers=1,
+        )
+
+    assert [p.arxiv_id for p in papers] == ["p1"]
+    assert call_count[0] == 2
+    assert any(
+        "arXiv HTTP 429" in rec.message and "before retry" in rec.message
+        for rec in caplog.records
+    )
+
+
+def test_fetch_raises_after_all_attempts_429(monkeypatch, caplog):
+    # 全アプリ層リトライ (初回 + 3 回 = 4 回) で 429 → ArxivRateLimitError
+    scripted = [_RateLimitedClient(429) for _ in range(4)]
+    call_count = _install_scripted_clients(monkeypatch, scripted)
+
+    with caplog.at_level("ERROR", logger="src.fetch_arxiv"):
+        with pytest.raises(fetch_arxiv.ArxivRateLimitError) as exc_info:
+            fetch_arxiv.fetch_latest_papers(
+                categories=["cs.AI"],
+                n=5,
+                query_days=1,
+                query_days_max=1,
+                min_papers=1,
+            )
+
+    assert exc_info.value.status == 429
+    assert "429" in str(exc_info.value)
+    assert call_count[0] == 4  # 4 回試して全部失敗
+    assert any("giving up" in rec.message for rec in caplog.records)
+
+
+def test_fetch_raises_after_all_attempts_503(monkeypatch):
+    # 503 も 429 と同様にレートリミット扱い
+    scripted = [_RateLimitedClient(503) for _ in range(4)]
+    _install_scripted_clients(monkeypatch, scripted)
+
+    with pytest.raises(fetch_arxiv.ArxivRateLimitError) as exc_info:
+        fetch_arxiv.fetch_latest_papers(
+            categories=["cs.AI"],
+            n=5,
+            query_days=1,
+            query_days_max=1,
+            min_papers=1,
+        )
+    assert exc_info.value.status == 503
+
+
+def test_non_rate_limit_http_error_is_not_retried(monkeypatch):
+    # 500 のようなレートリミット以外の HTTPError はリトライせず素通し
+    scripted = [_RateLimitedClient(500)]
+    call_count = _install_scripted_clients(monkeypatch, scripted)
+
+    with pytest.raises(fetch_arxiv.arxiv.HTTPError):
+        fetch_arxiv.fetch_latest_papers(
+            categories=["cs.AI"],
+            n=5,
+            query_days=1,
+            query_days_max=1,
+            min_papers=1,
+        )
+    assert call_count[0] == 1
+
+
+def test_rate_limit_skips_adaptive_window_expansion(monkeypatch):
+    # 適応窓ループの最中に ArxivRateLimitError が出たら、
+    # 窓を変えても結果は同じなので拡大せず即 raise する。
+    window_calls = [0]
+    real_fetch_window = fetch_arxiv._fetch_window
+
+    def fake_fetch_window(**kwargs):
+        window_calls[0] += 1
+        raise fetch_arxiv.ArxivRateLimitError(
+            "simulated rate limit", status=429
+        )
+
+    monkeypatch.setattr(fetch_arxiv, "_fetch_window", fake_fetch_window)
+
+    with pytest.raises(fetch_arxiv.ArxivRateLimitError):
+        fetch_arxiv.fetch_latest_papers(
+            categories=["cs.AI"],
+            n=10,
+            query_days=1,
+            query_days_max=14,
+            min_papers=5,
+        )
+
+    # 窓拡大せず 1 回だけ呼ばれて即 raise
+    assert window_calls[0] == 1
+    # silence unused warning
+    _ = real_fetch_window
 
 
 if __name__ == "__main__":  # pragma: no cover

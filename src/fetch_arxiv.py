@@ -19,6 +19,23 @@ logger = logging.getLogger(__name__)
 # entry_id 末尾の "v3" のようなバージョン表記を取り除く
 _VERSION_SUFFIX = re.compile(r"v\d+$")
 
+# arXiv API が返す「冷ましてくれ」系ステータス。これ以外の HTTPError は
+# 本物のバグの可能性が高いので素通しする。
+_RATE_LIMIT_STATUSES = frozenset({429, 503})
+
+# arxiv ライブラリ内部のリトライ (num_retries=5) を越えてなお 429/503 が
+# 返ってくる場合のアプリ層リトライ間隔。arxiv 側が落ち着くのを待つために
+# だいぶ長め (合計約5分) に取る。値の数だけ追加リトライが走る。
+_FETCH_RETRY_BACKOFFS_SECONDS: tuple[int, ...] = (30, 90, 180)
+
+
+class ArxivRateLimitError(Exception):
+    """arXiv API がアプリ層リトライ後も 429/503 を返し続けたときに raise。"""
+
+    def __init__(self, message: str, *, status: int | None = None) -> None:
+        super().__init__(message)
+        self.status = status
+
 
 @dataclass(frozen=True)
 class ArxivPaper:
@@ -57,7 +74,65 @@ def _fetch_window(
     delay_seconds: float,
     now: datetime,
 ) -> list[ArxivPaper]:
-    """1つの時間窓 (`query_days`) で取得して返す。重複・除外も適用済み。"""
+    """1つの時間窓 (`query_days`) で取得して返す。
+
+    arxiv ライブラリ内部のリトライを越えて 429/503 が返ってきたら、
+    `_FETCH_RETRY_BACKOFFS_SECONDS` の間隔で _fetch_window 全体を再試行。
+    それでも失敗したら `ArxivRateLimitError` を raise する（呼び出し側の
+    `fetch_latest_papers` はこれを catch せず、窓拡大ループに入らない）。
+    """
+    last_error: arxiv.HTTPError | None = None
+    total_attempts = len(_FETCH_RETRY_BACKOFFS_SECONDS) + 1
+    for attempt in range(1, total_attempts + 1):
+        try:
+            return _fetch_window_once(
+                categories=categories,
+                n=n,
+                query_days=query_days,
+                exclude_keywords=exclude_keywords,
+                excluded_ids=excluded_ids,
+                delay_seconds=delay_seconds,
+                now=now,
+            )
+        except arxiv.HTTPError as exc:
+            if exc.status not in _RATE_LIMIT_STATUSES:
+                raise
+            last_error = exc
+            if attempt < total_attempts:
+                backoff = _FETCH_RETRY_BACKOFFS_SECONDS[attempt - 1]
+                logger.warning(
+                    "arXiv HTTP %d (attempt %d/%d); sleeping %ds before retry",
+                    exc.status,
+                    attempt,
+                    total_attempts,
+                    backoff,
+                )
+                time.sleep(backoff)
+            else:
+                logger.error(
+                    "arXiv HTTP %d after %d attempts; giving up",
+                    exc.status,
+                    total_attempts,
+                )
+
+    assert last_error is not None
+    raise ArxivRateLimitError(
+        f"arXiv API returned HTTP {last_error.status} after {total_attempts} attempts",
+        status=last_error.status,
+    )
+
+
+def _fetch_window_once(
+    *,
+    categories: list[str],
+    n: int,
+    query_days: int,
+    exclude_keywords: list[str],
+    excluded_ids: set[str],
+    delay_seconds: float,
+    now: datetime,
+) -> list[ArxivPaper]:
+    """単一窓ぶんの 1 回の取得。レートリミットリトライは `_fetch_window` 側。"""
     cutoff = now - timedelta(days=query_days)
     query = _build_category_query(categories)
     fetch_limit = max(n * 5, 50)

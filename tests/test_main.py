@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 import pytest
 
 from src import main as main_module
-from src.fetch_arxiv import ArxivPaper
+from src.fetch_arxiv import ArxivPaper, ArxivRateLimitError
 from src.generate_podcast import NotebookLMRateLimitError
 
 
@@ -145,6 +145,42 @@ def test_main_rate_limit_without_retry_after_omits_hint(
     assert main_module.main() == 0
     msg = captured_notifies[0]
     assert "retry_after" not in msg
+
+
+# ---- arXiv レートリミット時の exit 0 -------------------------------------
+
+
+def test_main_returns_0_on_arxiv_rate_limit_with_distinct_message(
+    monkeypatch, captured_notifies, caplog
+):
+    monkeypatch.setattr(main_module, "load_published_ids", lambda: set())
+
+    def raise_arxiv_rate_limit(**kwargs):  # noqa: ARG001
+        raise ArxivRateLimitError("HTTP 429 after retries", status=429)
+
+    monkeypatch.setattr(
+        main_module, "fetch_latest_papers", raise_arxiv_rate_limit
+    )
+
+    with caplog.at_level(logging.INFO, logger="src.main"):
+        result = main_module.main()
+
+    assert result == 0
+    assert len(captured_notifies) == 1
+    msg = captured_notifies[0]
+    # arXiv 専用のマーカー絵文字と文言
+    assert "🐌" in msg
+    assert "arXiv" in msg
+    assert "次回 cron で再試行" in msg
+    # NotebookLM/論文0本 とは別文言
+    assert "🛑" not in msg
+    assert "📭" not in msg
+    # ログは INFO で ERROR ではない
+    arxiv_records = [
+        r for r in caplog.records if "arXiv rate-limited" in r.message
+    ]
+    assert arxiv_records, "expected an INFO log about arXiv rate limit"
+    assert all(r.levelno == logging.INFO for r in arxiv_records)
 
 
 # ---- それ以外の例外は従来どおり raise ------------------------------------

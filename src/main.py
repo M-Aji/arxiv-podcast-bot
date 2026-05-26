@@ -10,6 +10,7 @@ from datetime import date
 
 from src import config
 from src.fetch_arxiv import (
+    ArxivRateLimitError,
     fetch_latest_papers,
     load_published_ids,
     record_published_ids,
@@ -43,6 +44,16 @@ def main() -> int:
         record_published_ids([p.arxiv_id for p in selected])
         notify(
             f"{today}: ✅ 候補{len(papers)}本→上位{len(selected)}本でエピソード配信完了"
+        )
+        return 0
+
+    except ArxivRateLimitError as e:
+        # arXiv 側のレートリミット。cron が翌日再試行するので exit 0。
+        logger.info(
+            "arXiv rate-limited (status=%s); cron will retry tomorrow", e.status
+        )
+        notify(
+            f"{today}: 🐌 arXiv API レートリミット。次回 cron で再試行されます。"
         )
         return 0
 
