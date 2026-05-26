@@ -17,6 +17,7 @@ from src.fetch_arxiv import (
 from src.generate_podcast import NotebookLMRateLimitError, generate_audio_overview
 from src.notify import notify
 from src.publish import publish_episode
+from src.rank_papers import rank_papers, select_top_n
 
 logger = logging.getLogger(__name__)
 
@@ -35,10 +36,14 @@ def main() -> int:
             notify(f"{today}: 📭 該当論文0本のため生成スキップ")
             return 0
 
-        mp3_path = generate_audio_overview(papers, today)
-        publish_episode(mp3_path, papers, today)
-        record_published_ids([p.arxiv_id for p in papers])
-        notify(f"{today}: ✅ {len(papers)}本のエピソード配信完了")
+        ranked = rank_papers(papers)
+        selected = select_top_n(ranked, config.PAPERS_PER_EPISODE)
+        mp3_path = generate_audio_overview(selected, today)
+        publish_episode(mp3_path, selected, today)
+        record_published_ids([p.arxiv_id for p in selected])
+        notify(
+            f"{today}: ✅ 候補{len(papers)}本→上位{len(selected)}本でエピソード配信完了"
+        )
         return 0
 
     except NotebookLMRateLimitError as e:

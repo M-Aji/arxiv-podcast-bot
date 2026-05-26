@@ -134,13 +134,13 @@ def fetch_latest_papers(
     （上限 `query_days_max`）で再試行する。
     """
     categories = list(categories or config.ARXIV_CATEGORIES)
-    n = n if n is not None else config.PAPERS_PER_EPISODE
+    n = n if n is not None else config.CANDIDATE_POOL_SIZE
     start_days = query_days if query_days is not None else config.ARXIV_QUERY_DAYS
     max_days = (
         query_days_max if query_days_max is not None else config.ARXIV_QUERY_DAYS_MAX
     )
     min_papers = (
-        min_papers if min_papers is not None else config.ARXIV_MIN_PAPERS
+        min_papers if min_papers is not None else config.CANDIDATE_POOL_SIZE
     )
     exclude_keywords = list(exclude_keywords or config.EXCLUDE_KEYWORDS)
     excluded_ids = set(exclude_published_ids or ())

@@ -1,45 +1,35 @@
-"""ユーザーが編集する想定の設定値を集約するモジュール。
+# Smart Paper Ranking 実装仕様（Claude Haiku版）
 
-コードで直書きせず、すべての設定はここに置く。
-"""
-from __future__ import annotations
+このドキュメントをClaude Codeに渡して、以下の機能を実装してください。
 
-from pathlib import Path
+## 概要
 
-# ---- arXiv 検索設定 -------------------------------------------------------
+現状: arxivから10本取得 → そのまま全部NotebookLMに渡す
+変更後: arxivから30本取得 → Claude Haikuで興味プロファイルとのマッチ度スコアリング → 上位5本だけNotebookLMに渡す
 
-ARXIV_CATEGORIES: list[str] = [
-    "cs.AI",          # Artificial Intelligence
-    "cs.LG",          # Machine Learning
-    "cs.CL",          # Computation and Language (NLP)
-    "cs.MA",          # Multi-Agent Systems
-    "cs.SI",          # Social and Information Networks
-    "cs.CY",          # Computers and Society
-    "physics.soc-ph", # Physics and Society
-]
+## 1. `src/config.py` 変更
 
-# 取得ウィンドウ。最初は ARXIV_QUERY_DAYS で試し、取得本数が少ない場合は
-# 倍々に拡大して ARXIV_QUERY_DAYS_MAX まで再試行する。arXiv は土日に新着
-# 公開がない（金夜 ET → 土朝 UTC が最終バッチ）ため、月曜朝 UTC の実行は
-# 1日窓だとゼロ件になりがち。
-ARXIV_QUERY_DAYS: int = 1
-ARXIV_QUERY_DAYS_MAX: int = 14
-ARXIV_MIN_PAPERS: int = 5
+### 1-1. 既存定数の値変更
 
-PAPERS_PER_EPISODE: int = 5
-EXCLUDE_KEYWORDS: list[str] = []
+```python
+PAPERS_PER_EPISODE: int = 5     # 10 → 5
+```
 
-# arXiv API のレート制限。連続アクセス時の推奨間隔は3秒。
-ARXIV_DELAY_SECONDS: float = 3.0
+### 1-2. 新規定数を追加
 
-# ---- 論文ランキング（Claude Haiku） ---------------------------------------
-
-# arXiv から取得する候補プール本数（この中から PAPERS_PER_EPISODE 本を選抜）
+```python
 CANDIDATE_POOL_SIZE: int = 30
 RANKING_MODEL: str = "claude-haiku-4-5"
 RANKING_TIMEOUT_SECONDS: int = 30
 ANTHROPIC_API_KEY_ENV: str = "ANTHROPIC_API_KEY"
+```
 
+### 1-3. INTEREST_PROFILE 定数を新規追加
+
+以下の本文をそのまま多行文字列としてPythonに埋め込むこと。
+章番号・改行・箇条書きの形式を保つ。
+
+```python
 INTEREST_PROFILE: str = """\
 # Daily arXiv Audio Digest 用・論文選定プロファイル
 
@@ -225,62 +215,144 @@ LLMやAIモデルのreasoning、chain-of-thought、planning、multi-step reasoni
 - 応用上の意味や限界の議論が薄い論文
 - 自分の研究分野への転用可能性が低い論文
 """
+```
 
-# ---- NotebookLM 生成指示 --------------------------------------------------
+## 2. `src/fetch_arxiv.py` 調整
 
-NOTEBOOK_NAME_FORMAT: str = "arXiv {date}"  # {date}=YYYY-MM-DD
-AUDIO_OVERVIEW_INSTRUCTION: str = (
-    "本日のarXiv注目論文を、機械学習に詳しくない聴衆にも分かるように、"
-    "論文ごとに『何を解決した研究か』『使った手法』『主な結果』『限界』"
-    "の順で2〜3分ずつ紹介してください。論文に書かれていないことは推測せず、"
-    "不明な点はそう述べてください。"
-)
+- `fetch_latest_papers()` の `n` のデフォルト値を `PAPERS_PER_EPISODE` ではなく `CANDIDATE_POOL_SIZE` に変更
+- 適応窓の `min_papers` 判定も `CANDIDATE_POOL_SIZE` 基準で
 
-# NotebookLM CLI 操作のタイムアウト設定
-SOURCE_READY_POLL_INTERVAL_SECONDS: int = 10
-SOURCE_READY_TIMEOUT_SECONDS: int = 10 * 60
+## 3. 新規モジュール `src/rank_papers.py`
 
-# Audio 生成は 10〜20分かかる。`generate audio --wait --timeout 300` は
-# 短めに切り、タイムアウトで返って来たレスポンスから task_id を救出し
-# `artifact wait` で同じタスクを `AUDIO_WAIT_RETRY_TIMEOUT_SECONDS` まで
-# `AUDIO_WAIT_CHUNK_SECONDS` 刻みでポーリングする。決して再生成しない。
-AUDIO_INITIAL_WAIT_TIMEOUT_SECONDS: int = 300
-AUDIO_WAIT_CHUNK_SECONDS: int = 600
-AUDIO_WAIT_RETRY_TIMEOUT_SECONDS: int = 30 * 60
+```python
+"""Claude Haiku による論文関連度スコアリング。"""
 
-# ---- Podcast メタデータ ---------------------------------------------------
+@dataclass
+class RankedPaper:
+    paper: ArxivPaper
+    score: float       # 0.0-10.0
+    rationale: str     # 日本語1行の理由
 
-PODCAST_TITLE: str = "Daily arXiv Digest (JP)"
-PODCAST_DESCRIPTION: str = (
-    "毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。"
-)
-PODCAST_AUTHOR: str = "M-Aji"
-PODCAST_LANGUAGE: str = "ja"
-PODCAST_CATEGORY: str = "Technology"
-PODCAST_IMAGE_URL: str = "https://m-aji.github.io/arxiv-podcast-bot/cover.png"
+def rank_papers(candidates: list[ArxivPaper]) -> list[RankedPaper]:
+    """各論文をClaude Haikuで0-10スコアリングし、降順ソートで返す。"""
 
-# ---- 配信 -----------------------------------------------------------------
+def select_top_n(ranked: list[RankedPaper], n: int) -> list[ArxivPaper]:
+    """上位 n 本の ArxivPaper を返す。"""
+```
 
-GITHUB_REPO: str = "M-Aji/arxiv-podcast-bot"
-GITHUB_PAGES_BASE_URL: str = "https://m-aji.github.io/arxiv-podcast-bot"
+### スコアリング詳細
 
-# RSS 保持エピソード上限
-MAX_EPISODES_IN_FEED: int = 100
+各論文ごとに個別にClaude APIを呼ぶ（バッチ送信ではない、エラー耐性のため）。
 
-# ---- パス -----------------------------------------------------------------
+**system プロンプト：**
 
-# プロジェクトルート。state/、feed/、build/ の基準。
-PROJECT_ROOT: Path = Path(__file__).resolve().parent.parent
+```
+あなたは研究者の興味プロファイルに基づいて論文を評価するアシスタントです。
+以下のプロファイルを基準に、与えられた論文がこの研究者にとってどの程度
+関連性が高いかを 0.0〜10.0 でスコアリングしてください。
 
-STATE_DIR: Path = PROJECT_ROOT / "state"
-PUBLISHED_PAPERS_FILE: Path = STATE_DIR / "published_papers.json"
+評価軸:
+- プロファイルの「強く興味あり/優先度高」のテーマと合致 → 7.0〜10.0
+- 「普通に興味あり/優先度中」のテーマと合致 → 4.0〜7.0
+- 「スキップしたい/優先度低」に該当 → 0.0〜3.0
+- どれにも明確に当てはまらない → 3.0〜5.0
 
-FEED_DIR: Path = PROJECT_ROOT / "feed"
-FEED_FILE: Path = FEED_DIR / "podcast.xml"
+出力は厳密に以下のJSON形式のみ（前後に何も書かない）:
+{"score": <float>, "rationale": "<日本語で1行、なぜこのスコアなのか>"}
 
-BUILD_DIR: Path = PROJECT_ROOT / "build"
-EPISODE_MP3_PATH: Path = BUILD_DIR / "episode.mp3"
+プロファイル:
+<config.INTEREST_PROFILE をここに展開>
+```
 
-# ---- 通知（任意、未設定ならスキップ） ------------------------------------
+**user プロンプト：**
 
-DISCORD_WEBHOOK_URL_ENV: str = "DISCORD_WEBHOOK_URL"
+```
+タイトル: <paper.title>
+要約: <paper.abstract>
+```
+
+### 技術要件
+
+- `anthropic` Python SDK の Messages API を使用
+- `model=config.RANKING_MODEL`, `max_tokens=200`, `temperature=0.3`
+- `timeout=config.RANKING_TIMEOUT_SECONDS`
+- リトライ3回、指数バックオフ（1秒 → 2秒 → 4秒）
+- 単一論文の評価失敗時:
+  - スコア 5.0、`rationale="(評価失敗のため中立評価)"` で続行
+  - WARNINGログ
+- 全件失敗 or `ANTHROPIC_API_KEY` 未設定:
+  - WARNINGログを出力
+  - 全候補に score=5.0, rationale="(ranking skipped)" を割り当て
+  - 元の `candidates` 順をそのまま維持
+- 各論文のスコアと理由はINFOログ:
+  ```
+  ranked: 8.5 | LLM Agents for Urban Mobility Simulation... | LLMエージェント＋交通シミュレーションで強く合致
+  ```
+
+## 4. `src/main.py` 修正
+
+```python
+from src.rank_papers import rank_papers, select_top_n
+
+papers = fetch_latest_papers(...)   # CANDIDATE_POOL_SIZE 本
+if not papers:
+    ...
+ranked = rank_papers(papers)
+selected = select_top_n(ranked, config.PAPERS_PER_EPISODE)
+mp3_path = generate_audio_overview(selected, today)
+publish_episode(mp3_path, selected, today)
+record_published_ids([p.arxiv_id for p in selected])
+...
+notify(f"{today}: ✅ 候補{len(papers)}本→上位{len(selected)}本でエピソード配信完了")
+```
+
+## 5. 依存追加
+
+`pyproject.toml` に `anthropic>=0.45.0` を追加。
+
+## 6. GitHub Actions ワークフロー
+
+`.github/workflows/daily-podcast.yml` の `Run podcast generation` ステップに env を追加：
+
+```yaml
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+  ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+```
+
+## 7. テスト `tests/test_rank_papers.py`（新規）
+
+以下を網羅:
+
+- スコアパース成功 → 順序が正しい降順
+- API完全失敗 → フォールバック（全件 score=5.0、元の順序維持）
+- 部分失敗（10本中3本のAPI失敗）→ 残り7本は正しくスコアリング、失敗3本は score=5.0
+- 空入力 → 空出力
+- `ANTHROPIC_API_KEY` 未設定 → フォールバック動作
+- `select_top_n`: n より少ない入力でも壊れない
+- JSON パース失敗（モデルが不正な出力を返した場合）→ フォールバック、リトライ
+
+anthropic SDK の `Messages.create` を `pytest-mock` でモック化。
+
+## 8. README.md 更新
+
+「興味プロファイルの編集」セクションを追加し、`src/config.py` の `INTEREST_PROFILE`
+を書き換えるだけで選定基準を変更できる旨を案内。
+
+## 9. コミット & push
+
+コミットメッセージ:
+
+```
+Add Claude Haiku based paper ranking for daily 5-paper selection from a 30-paper pool
+
+- Fetch 30 candidate papers per day (was 10), rank by relevance to user's
+  interest profile via Claude Haiku, pick top 5 for the NotebookLM podcast.
+- Interest profile lives in src/config.py and is the single point of edit
+  for changing selection criteria.
+- Falls back to "publication date order" if ANTHROPIC_API_KEY is missing
+  or the API fails entirely, so the bot keeps working even without ranking.
+```
+
+実装完了後、push してください。
