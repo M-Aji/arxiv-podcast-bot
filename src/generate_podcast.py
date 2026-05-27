@@ -306,7 +306,11 @@ def create_notebook(title: str) -> str:
 
 
 def add_source(notebook_id: str, url: str) -> str | None:
-    """論文 abs URL を source として追加。失敗時は None を返してスキップ。"""
+    """論文 PDF URL を source として追加。失敗時は None を返してスキップ。
+
+    PDF 直リンクを渡すと NotebookLM が本文全体を読み取れるため、abstract
+    だけ読まれて内容が薄くなる事態を防げる。
+    """
     try:
         proc = _run(
             [
@@ -534,7 +538,9 @@ def generate_audio_overview(
 
     source_ids: list[str] = []
     for paper in papers:
-        sid = add_source(notebook_id, paper.abs_url)
+        # PDF を渡すことで NotebookLM が本文を読める（abs_url だと abstract のみ）。
+        # 人間向けの abs リンクは daily_papers/*.md と RSS description で別途使う。
+        sid = add_source(notebook_id, paper.pdf_url)
         if sid:
             source_ids.append(sid)
     if not source_ids:

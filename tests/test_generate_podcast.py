@@ -143,11 +143,17 @@ def test_create_notebook_raises_when_id_missing(monkeypatch):
 
 
 def test_add_source_parses_new_nested_response(monkeypatch):
+    captured: dict = {}
+
     def fake_run(cmd, **kwargs):  # noqa: ARG001
+        captured["cmd"] = list(cmd)
         return _FakeProc(stdout='{"source": {"id": "src-1", "type": "url"}}')
 
     monkeypatch.setattr(generate_podcast, "_run", fake_run)
-    assert generate_podcast.add_source("nb-1", "https://arxiv.org/abs/x") == "src-1"
+    pdf_url = "https://arxiv.org/pdf/2405.12345"
+    assert generate_podcast.add_source("nb-1", pdf_url) == "src-1"
+    # PDF URL がそのまま CLI 引数として渡っていることを確認
+    assert pdf_url in captured["cmd"]
 
 
 # ---- _extract_task_id_from_error -----------------------------------------
@@ -428,7 +434,85 @@ def test_add_source_reraises_rate_limit(monkeypatch):
 
     monkeypatch.setattr(generate_podcast, "_run", fake_run)
     with pytest.raises(generate_podcast.NotebookLMRateLimitError):
-        generate_podcast.add_source("nb-1", "https://arxiv.org/abs/x")
+        generate_podcast.add_source("nb-1", "https://arxiv.org/pdf/x")
+
+
+# ---- generate_audio_overview: NotebookLM へ渡すのは PDF URL --------------
+
+
+def test_generate_audio_overview_passes_pdf_url_to_add_source(
+    monkeypatch, tmp_path
+):
+    """abstract URL ではなく PDF URL を NotebookLM に渡すことを保証。
+
+    abs URL を渡すと NotebookLM がアブストラクトだけしか読まず、ポッドキャスト
+    の内容が薄くなる回帰を防ぐためのガード。
+    """
+    from datetime import date, timezone
+
+    papers = [
+        generate_podcast.ArxivPaper(
+            arxiv_id="2405.00001",
+            title="T1",
+            authors=["A"],
+            abstract="abs",
+            abs_url="https://arxiv.org/abs/2405.00001",
+            pdf_url="https://arxiv.org/pdf/2405.00001",
+            published=__import__("datetime").datetime(2026, 5, 27, tzinfo=timezone.utc),
+            primary_category="cs.AI",
+        ),
+        generate_podcast.ArxivPaper(
+            arxiv_id="2405.00002",
+            title="T2",
+            authors=["B"],
+            abstract="abs2",
+            abs_url="https://arxiv.org/abs/2405.00002",
+            pdf_url="https://arxiv.org/pdf/2405.00002",
+            published=__import__("datetime").datetime(2026, 5, 27, tzinfo=timezone.utc),
+            primary_category="cs.LG",
+        ),
+    ]
+
+    monkeypatch.setattr(generate_podcast, "restore_storage_state", lambda: None)
+    monkeypatch.setattr(generate_podcast, "set_language", lambda code="ja": None)
+    monkeypatch.setattr(
+        generate_podcast, "create_notebook", lambda title: "nb-fake"
+    )
+
+    captured_urls: list[str] = []
+
+    def fake_add_source(notebook_id, url):  # noqa: ARG001
+        captured_urls.append(url)
+        return f"src-{len(captured_urls)}"
+
+    monkeypatch.setattr(generate_podcast, "add_source", fake_add_source)
+    monkeypatch.setattr(
+        generate_podcast,
+        "wait_for_source",
+        lambda notebook_id, source_id, *, timeout: True,
+    )
+    monkeypatch.setattr(
+        generate_podcast,
+        "generate_audio",
+        lambda notebook_id, instruction, *, language="ja": None,
+    )
+
+    output = tmp_path / "ep.mp3"
+
+    def fake_download(notebook_id, path):  # noqa: ARG001
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(b"\x00" * 2048)
+        return path
+
+    monkeypatch.setattr(generate_podcast, "download_audio", fake_download)
+
+    result = generate_podcast.generate_audio_overview(
+        papers, date(2026, 5, 27), output_path=output
+    )
+    assert result == output
+    assert captured_urls == [p.pdf_url for p in papers]
+    # 念のため abs_url が紛れ込んでいないことも確認
+    assert not any("/abs/" in u for u in captured_urls)
 
 
 # ---- restore_storage_state logging --------------------------------------

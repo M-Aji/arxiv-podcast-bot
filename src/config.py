@@ -266,9 +266,11 @@ AUDIO_OVERVIEW_INSTRUCTION: str = (
     "不明な点はそう述べてください。"
 )
 
-# NotebookLM CLI 操作のタイムアウト設定
+# NotebookLM CLI 操作のタイムアウト設定。
+# PDF を source に渡すようになってからは abstract URL より処理に時間がかかる
+# ので、ready 待ちを 15 分まで広めに取る。ポーリング間隔は 10s のまま。
 SOURCE_READY_POLL_INTERVAL_SECONDS: int = 10
-SOURCE_READY_TIMEOUT_SECONDS: int = 10 * 60
+SOURCE_READY_TIMEOUT_SECONDS: int = 15 * 60
 
 # Audio 生成は 10〜20分かかる。`generate audio --wait --timeout 300` は
 # 短めに切り、タイムアウトで返って来たレスポンスから task_id を救出し
