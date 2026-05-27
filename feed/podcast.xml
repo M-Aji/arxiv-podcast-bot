@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0">
+  <channel>
+    <title>Daily arXiv Digest (JP)</title>
+    <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
+    <description>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</description>
+    <atom:link href="https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml" rel="self"/>
+    <docs>http://www.rssboard.org/rss-specification</docs>
+    <generator>python-feedgen</generator>
+    <image>
+      <url>https://m-aji.github.io/arxiv-podcast-bot/cover.png</url>
+      <title>Daily arXiv Digest (JP)</title>
+      <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
+    </image>
+    <language>ja</language>
+    <lastBuildDate>Wed, 27 May 2026 01:10:17 +0000</lastBuildDate>
+    <itunes:author>M-Aji</itunes:author>
+    <itunes:category text="Technology"/>
+    <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
+    <itunes:explicit>no</itunes:explicit>
+    <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-05-27</title>
+      <description>本日の注目論文：
+
+1. From Model Scaling to System Scaling: Scaling the Harness in Agentic AI — Shangding Gu
+   https://arxiv.org/abs/2605.26112
+2. Automated Benchmark Auditing for AI Agents and Large Language Models — Junlin Wang, Federico Bianchi et al.
+   https://arxiv.org/abs/2605.26079
+3. Claw-Anything: Benchmarking Always-On Personal Assistants with Broader Access to User's Digital World — Yusong Lin, Xinyuan Liang et al.
+   https://arxiv.org/abs/2605.26086
+4. DiscoverPhysics: Benchmarking LLMs for Out-of-the-Box Scientific Thinking — Matt L. Wiemann, Lindsay M. Smith et al.
+   https://arxiv.org/abs/2605.26087
+5. MobileGym: A Verifiable and Highly Parallel Simulation Platform for Mobile GUI Agent Research — Dingbang Wu, Rui Hao et al.
+   https://arxiv.org/abs/2605.26114</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-05-27</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-05-27/episode.mp3" length="43077974" type="audio/mpeg"/>
+      <pubDate>Wed, 27 May 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
+  </channel>
+</rss>
