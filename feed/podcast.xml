@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Wed, 27 May 2026 01:10:17 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 27 May 2026 22:59:20 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-05-28</title>
+      <description>本日の注目論文：
+
+1. Alignment Tampering: How Reinforcement Learning from Human Feedback Is Exploited to Optimize Misaligned Biases — Dongyoon Hahm, Dylan Hadfield-Menell et al.
+   https://arxiv.org/abs/2605.27355
+2. MUSE-Autoskill: Self-Evolving Agents via Skill Creation, Memory, Management, and Evaluation — Huawei Lin, Peng Li et al.
+   https://arxiv.org/abs/2605.27366
+3. Governed Evolution of Agent Runtimes through Executable Operational Cognition — Mariano Garralda-Barrio
+   https://arxiv.org/abs/2605.27328
+4. FinHarness: An Inline Lifecycle Safety Harness for Finance LLM Agents — Haoxuan Jia, Yang Liu et al.
+   https://arxiv.org/abs/2605.27333
+5. Algorithmic Monocultures in Hiring — Rishi Bommasani, Sarah H. Bana et al.
+   https://arxiv.org/abs/2605.27371</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-05-28</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-05-28/episode.mp3" length="36533721" type="audio/mpeg"/>
+      <pubDate>Thu, 28 May 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-05-27</title>
       <description>本日の注目論文：
