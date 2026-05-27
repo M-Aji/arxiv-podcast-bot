@@ -85,6 +85,72 @@ def test_commit_and_push_partial_existence_commits_only_existing(
     assert _git_commit_calls(captured_calls), "commit should be invoked"
 
 
+def test_commit_and_push_sets_local_git_identity_before_commit(
+    tmp_path, captured_calls
+):
+    """GitHub Actions runner 対策: commit 直前に git identity を `--local` で設定。
+
+    `--global` は使わない（ローカル開発環境の global 設定を汚さない）。
+    identity 設定は `git commit` より前で、`git add` 〜 `git commit` の間に来る。
+    """
+    existing = tmp_path / "feed.xml"
+    existing.write_text("<rss/>")
+
+    publish_module.commit_and_push([existing], date(2026, 5, 26))
+
+    config_calls = [
+        c for c in captured_calls if len(c) >= 2 and c[:2] == ["git", "config"]
+    ]
+    assert len(config_calls) == 2, f"expected 2 git config calls, got {config_calls}"
+
+    # 全 git config 呼び出しは `--local` を含み、`--global` を含まない
+    for c in config_calls:
+        assert "--local" in c, f"identity must be set with --local, got: {c}"
+        assert "--global" not in c, f"identity must not touch --global, got: {c}"
+
+    names = [c for c in config_calls if "user.name" in c]
+    emails = [c for c in config_calls if "user.email" in c]
+    assert len(names) == 1 and "github-actions[bot]" in names[0]
+    assert len(emails) == 1 and "github-actions[bot]@users.noreply.github.com" in emails[0]
+
+    # 順序: add → config → commit
+    add_idx = next(
+        i for i, c in enumerate(captured_calls) if c[:2] == ["git", "add"]
+    )
+    commit_idx = next(
+        i for i, c in enumerate(captured_calls) if c[:2] == ["git", "commit"]
+    )
+    config_indices = [
+        i for i, c in enumerate(captured_calls) if c[:2] == ["git", "config"]
+    ]
+    assert all(add_idx < ci < commit_idx for ci in config_indices), (
+        f"git config must run between add and commit, got order: {captured_calls}"
+    )
+
+
+def test_commit_and_push_no_identity_calls_when_no_changes(tmp_path, monkeypatch):
+    """staged changes が無ければ identity も設定しない（無駄な副作用を避ける）。"""
+    existing = tmp_path / "feed.xml"
+    existing.write_text("<rss/>")
+
+    calls: list[list[str]] = []
+
+    class _Proc:
+        returncode = 0
+        stdout = ""
+        stderr = ""
+
+    def fake_run(cmd, *, check=True):  # noqa: ARG001
+        calls.append(list(cmd))
+        return _Proc()
+
+    monkeypatch.setattr(publish_module, "_run", fake_run)
+    publish_module.commit_and_push([existing], date(2026, 5, 26))
+
+    assert not any(c[:2] == ["git", "config"] for c in calls)
+    assert not any(c[:2] == ["git", "commit"] for c in calls)
+
+
 def test_commit_and_push_skips_commit_when_no_staged_changes(
     tmp_path, monkeypatch
 ):

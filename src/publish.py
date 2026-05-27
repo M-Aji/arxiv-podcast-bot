@@ -145,6 +145,20 @@ def commit_and_push(
         logger.info("no staged changes — skipping commit")
         return
 
+    # GitHub Actions の runner は global gitconfig が空で `git commit` が
+    # exit 128 になるため、commit 直前にリポジトリローカル設定で identity を
+    # 冪等にセットする。`--local` でローカル開発環境の global 設定を汚さない。
+    _run(["git", "config", "--local", "user.name", "github-actions[bot]"])
+    _run(
+        [
+            "git",
+            "config",
+            "--local",
+            "user.email",
+            "github-actions[bot]@users.noreply.github.com",
+        ]
+    )
+
     message = f"Daily episode {today.isoformat()}"
     _run(["git", "commit", "-m", message])
     _run(["git", "push"])

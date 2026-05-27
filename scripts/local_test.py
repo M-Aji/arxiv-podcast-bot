@@ -9,7 +9,6 @@ from __future__ import annotations
 import argparse
 import logging
 import sys
-from datetime import date
 from pathlib import Path
 
 # `python scripts/local_test.py` でも import できるようリポジトリ直下を sys.path に
@@ -78,7 +77,7 @@ def main(argv: list[str] | None = None) -> int:
     # 遅延 import: notebooklm CLI が未ログインでもfetch-onlyが動くようにする
     from src.generate_podcast import generate_audio_overview
 
-    today = date.today()
+    today = config.today_jst()
     mp3_path = generate_audio_overview(papers, today)
     print(f"\n✔ MP3 生成完了: {mp3_path}")
 

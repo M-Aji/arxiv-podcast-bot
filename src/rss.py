@@ -9,7 +9,7 @@ from __future__ import annotations
 import logging
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field
-from datetime import date, datetime, time, timedelta, timezone
+from datetime import date, datetime, time
 from email.utils import format_datetime, parsedate_to_datetime
 from pathlib import Path
 from typing import Iterable, Sequence
@@ -17,11 +17,10 @@ from typing import Iterable, Sequence
 from feedgen.feed import FeedGenerator
 
 from src import config
+from src.config import JST
 from src.fetch_arxiv import ArxivPaper
 
 logger = logging.getLogger(__name__)
-
-JST = timezone(timedelta(hours=9))
 
 
 @dataclass

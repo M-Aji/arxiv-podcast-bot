@@ -4,7 +4,19 @@
 """
 from __future__ import annotations
 
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
+
+# ---- タイムゾーン ---------------------------------------------------------
+# 配信日は日本時間（JST）基準で決める。cron が 21:00 UTC = 06:00 JST に
+# 発火するため、`date.today()` (= UTC) を素朴に使うと「昨日の日付」で
+# ノートブック名・タグ・ファイル名が生成されてしまう。
+JST: timezone = timezone(timedelta(hours=9))
+
+
+def today_jst() -> date:
+    """JST 基準の本日日付。全モジュールで配信日を決める唯一の入口。"""
+    return datetime.now(JST).date()
 
 # ---- arXiv 検索設定 -------------------------------------------------------
 

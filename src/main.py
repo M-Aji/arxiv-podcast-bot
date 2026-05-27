@@ -6,7 +6,6 @@ from __future__ import annotations
 
 import logging
 import sys
-from datetime import date
 
 from src import config
 from src.daily_archive import write_daily_archive
@@ -29,7 +28,7 @@ def main() -> int:
         level=logging.INFO,
         format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
     )
-    today = date.today()
+    today = config.today_jst()
     try:
         published_ids = load_published_ids()
         papers = fetch_latest_papers(exclude_published_ids=published_ids)
