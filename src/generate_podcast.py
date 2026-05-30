@@ -9,13 +9,17 @@ import json
 import logging
 import os
 import re
+import shutil
 import subprocess
+import time
 from datetime import date
 from pathlib import Path
 from typing import Sequence
 
+import requests
+
 from src import config
-from src.fetch_arxiv import ArxivPaper
+from src.fetch_arxiv import ArxivPaper, ArxivRateLimitError
 
 logger = logging.getLogger(__name__)
 
@@ -305,42 +309,155 @@ def create_notebook(title: str) -> str:
     return notebook_id
 
 
-def add_source(notebook_id: str, url: str) -> str | None:
-    """論文 PDF URL を source として追加。失敗時は None を返してスキップ。
+# ---- PDF ダウンロード ----------------------------------------------------
+#
+# arxiv の PDF URL を NotebookLM に直接渡すと、NotebookLM サーバ側が PDF を
+# 取りに行ったときに NETWORK_ERROR / GENERATION_FAILED が頻発する（特定の
+# arxiv ホスト、CDN の不調、PDF サイズなど条件が読めない）。それを避けるため
+# こちらで先に PDF をローカルへ落として `--type file` でアップロードする。
 
-    PDF 直リンクを渡すと NotebookLM が本文全体を読み取れるため、abstract
-    だけ読まれて内容が薄くなる事態を防げる。
+
+# arxiv API リトライ間隔（指数的にバックオフ）。3回まで再試行。
+_PDF_DOWNLOAD_BACKOFFS_SECONDS: tuple[int, ...] = (5, 15, 45)
+
+
+def _download_pdf(paper: ArxivPaper, dest_dir: Path) -> Path:
+    """arxiv PDF を `dest_dir/{arxiv_id}.pdf` にダウンロードして返す。
+
+    arxiv API は連続アクセス時 3秒間隔を推奨（呼び出し側で sleep する）。
+    `stream=True` でチャンク読みし、`PDF_DOWNLOAD_MAX_SIZE_MB` を超えた時点で
+    中断する。タイムアウトは `PDF_DOWNLOAD_TIMEOUT_SECONDS`、リトライは
+    指数バックオフで3回まで。429/503 は arxiv 側のレートリミットとして
+    `ArxivRateLimitError` に変換し上位へ伝播（main 側で翌日リトライ扱い）。
     """
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    dest = dest_dir / f"{paper.arxiv_id}.pdf"
+    max_bytes = config.PDF_DOWNLOAD_MAX_SIZE_MB * 1024 * 1024
+
+    attempts = len(_PDF_DOWNLOAD_BACKOFFS_SECONDS) + 1
+    last_exc: Exception | None = None
+    for attempt in range(1, attempts + 1):
+        try:
+            with requests.get(
+                paper.pdf_url,
+                stream=True,
+                timeout=config.PDF_DOWNLOAD_TIMEOUT_SECONDS,
+                headers={"User-Agent": "arxiv-podcast-bot/0.1"},
+            ) as resp:
+                if resp.status_code in (429, 503):
+                    raise ArxivRateLimitError(
+                        f"arxiv returned HTTP {resp.status_code} for "
+                        f"{paper.arxiv_id} PDF download",
+                        status=resp.status_code,
+                    )
+                resp.raise_for_status()
+                total = 0
+                with dest.open("wb") as fh:
+                    for chunk in resp.iter_content(chunk_size=64 * 1024):
+                        if not chunk:
+                            continue
+                        total += len(chunk)
+                        if total > max_bytes:
+                            # 部分書き込みは捨てる
+                            fh.close()
+                            dest.unlink(missing_ok=True)
+                            raise NotebookLMError(
+                                f"PDF {paper.arxiv_id} exceeded "
+                                f"{config.PDF_DOWNLOAD_MAX_SIZE_MB}MB cap "
+                                f"(>{total} bytes)"
+                            )
+                        fh.write(chunk)
+            logger.info(
+                "downloaded PDF %s (%d bytes) → %s",
+                paper.arxiv_id, total, dest,
+            )
+            return dest
+        except ArxivRateLimitError:
+            # レートリミットは全件で同じ失敗を繰り返すので即時上位へ
+            raise
+        except (requests.RequestException, OSError) as exc:
+            last_exc = exc
+            if attempt < attempts:
+                backoff = _PDF_DOWNLOAD_BACKOFFS_SECONDS[attempt - 1]
+                logger.warning(
+                    "PDF download for %s failed (attempt %d/%d): %s; "
+                    "retrying in %ds",
+                    paper.arxiv_id, attempt, attempts, exc, backoff,
+                )
+                time.sleep(backoff)
+            else:
+                logger.error(
+                    "PDF download for %s failed after %d attempts: %s",
+                    paper.arxiv_id, attempts, exc,
+                )
+
+    assert last_exc is not None
+    raise NotebookLMError(
+        f"failed to download PDF for {paper.arxiv_id}: {last_exc}"
+    ) from last_exc
+
+
+def _cleanup_pdf_dir(pdf_dir: Path) -> None:
+    """エピソード生成完了後にダウンロード済 PDF を片付ける。冪等。"""
+    if not pdf_dir.exists():
+        return
     try:
-        proc = _run(
-            [
-                *_base_cmd(),
-                "source",
-                "add",
-                url,
-                "--notebook",
-                notebook_id,
-                "--type",
-                "url",
-                "--timeout",
-                "120",
-                "--json",
-            ]
-        )
+        shutil.rmtree(pdf_dir)
+        logger.debug("cleaned up pdf dir %s", pdf_dir)
+    except OSError as exc:
+        logger.warning("failed to clean pdf dir %s: %s", pdf_dir, exc)
+
+
+def add_source(
+    notebook_id: str,
+    content: str,
+    *,
+    source_type: str = "url",
+    mime_type: str | None = None,
+    title: str | None = None,
+) -> str | None:
+    """source を追加。失敗時は None を返してスキップ。
+
+    `content` は `source_type` に応じて URL かローカルファイルパスを渡す。
+    arxiv の PDF は URL 直渡しだと NotebookLM サーバが拾えず NETWORK_ERROR /
+    GENERATION_FAILED になるので、上位では先にダウンロードして
+    `source_type="file"` で呼ぶ運用。`mime_type` / `title` は file 型のときに
+    のみ意味を持つ（CLI 側で --mime-type / --title として渡される）。
+    """
+    cmd = [
+        *_base_cmd(),
+        "source",
+        "add",
+        content,
+        "--notebook",
+        notebook_id,
+        "--type",
+        source_type,
+        "--timeout",
+        "120",
+        "--json",
+    ]
+    if mime_type:
+        cmd.extend(["--mime-type", mime_type])
+    if title:
+        cmd.extend(["--title", title])
+
+    try:
+        proc = _run(cmd)
     except (NotebookLMAuthError, NotebookLMRateLimitError):
         # 認証失効・レートリミットは全 source で同じ失敗を繰り返すので
         # ここで止めて上位に伝播させる
         raise
     except NotebookLMError as exc:
-        logger.warning("failed to add source %s — skipping. %s", url, exc)
+        logger.warning("failed to add source %s — skipping. %s", content, exc)
         return None
 
     payload = _parse_json(proc.stdout)
     source_id = _extract_source_id(payload)
     if not source_id:
-        logger.warning("no source id in add response for %s: %s", url, payload)
+        logger.warning("no source id in add response for %s: %s", content, payload)
         return None
-    logger.info("added source %s for %s", source_id, url)
+    logger.info("added source %s for %s", source_id, content)
     return source_id
 
 
@@ -536,29 +653,51 @@ def generate_audio_overview(
     title = config.NOTEBOOK_NAME_FORMAT.format(date=today.isoformat())
     notebook_id = create_notebook(title)
 
-    source_ids: list[str] = []
-    for paper in papers:
-        # PDF を渡すことで NotebookLM が本文を読める（abs_url だと abstract のみ）。
-        # 人間向けの abs リンクは daily_papers/*.md と RSS description で別途使う。
-        sid = add_source(notebook_id, paper.pdf_url)
-        if sid:
-            source_ids.append(sid)
-    if not source_ids:
-        raise NotebookLMError("no sources were added successfully")
+    pdf_dir = config.PDF_DOWNLOAD_DIR
+    try:
+        source_ids: list[str] = []
+        for i, paper in enumerate(papers):
+            if i > 0:
+                # arxiv 側のレート制限（推奨3秒）を踏まないよう一拍置く
+                time.sleep(config.ARXIV_DELAY_SECONDS)
+            try:
+                pdf_path = _download_pdf(paper, pdf_dir)
+            except ArxivRateLimitError:
+                # 全件に効く致命傷。main 側で翌日リトライ扱いになるよう伝播
+                raise
+            except NotebookLMError as exc:
+                logger.warning(
+                    "skipping %s: PDF download failed: %s",
+                    paper.arxiv_id, exc,
+                )
+                continue
+            sid = add_source(
+                notebook_id,
+                str(pdf_path),
+                source_type="file",
+                mime_type="application/pdf",
+                title=paper.title or paper.arxiv_id,
+            )
+            if sid:
+                source_ids.append(sid)
+        if not source_ids:
+            raise NotebookLMError("no sources were added successfully")
 
-    logger.info("waiting for %d sources to become ready", len(source_ids))
-    ready: list[str] = []
-    for sid in source_ids:
-        if wait_for_source(
-            notebook_id, sid, timeout=config.SOURCE_READY_TIMEOUT_SECONDS
-        ):
-            ready.append(sid)
-    if not ready:
-        raise NotebookLMError("no sources became ready in time")
+        logger.info("waiting for %d sources to become ready", len(source_ids))
+        ready: list[str] = []
+        for sid in source_ids:
+            if wait_for_source(
+                notebook_id, sid, timeout=config.SOURCE_READY_TIMEOUT_SECONDS
+            ):
+                ready.append(sid)
+        if not ready:
+            raise NotebookLMError("no sources became ready in time")
 
-    generate_audio(
-        notebook_id,
-        config.AUDIO_OVERVIEW_INSTRUCTION,
-        language=config.PODCAST_LANGUAGE,
-    )
-    return download_audio(notebook_id, output_path)
+        generate_audio(
+            notebook_id,
+            config.AUDIO_OVERVIEW_INSTRUCTION,
+            language=config.PODCAST_LANGUAGE,
+        )
+        return download_audio(notebook_id, output_path)
+    finally:
+        _cleanup_pdf_dir(pdf_dir)

@@ -313,6 +313,13 @@ FEED_FILE: Path = FEED_DIR / "podcast.xml"
 BUILD_DIR: Path = PROJECT_ROOT / "build"
 EPISODE_MP3_PATH: Path = BUILD_DIR / "episode.mp3"
 
+# arXiv PDF をローカルに落としてから NotebookLM にアップロードする。
+# URL 直渡しだと NotebookLM サーバ側で NETWORK_ERROR / GENERATION_FAILED が
+# 頻発したため、こちらで PDF を確保して file 型 source として上げる。
+PDF_DOWNLOAD_DIR: Path = BUILD_DIR / "pdfs"
+PDF_DOWNLOAD_TIMEOUT_SECONDS: int = 60
+PDF_DOWNLOAD_MAX_SIZE_MB: int = 20
+
 # ---- 通知（任意、未設定ならスキップ） ------------------------------------
 
 DISCORD_WEBHOOK_URL_ENV: str = "DISCORD_WEBHOOK_URL"

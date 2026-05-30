@@ -154,6 +154,43 @@ def test_add_source_parses_new_nested_response(monkeypatch):
     assert generate_podcast.add_source("nb-1", pdf_url) == "src-1"
     # PDF URL がそのまま CLI 引数として渡っていることを確認
     assert pdf_url in captured["cmd"]
+    # デフォルト source_type は url
+    assert "--type" in captured["cmd"]
+    type_idx = captured["cmd"].index("--type")
+    assert captured["cmd"][type_idx + 1] == "url"
+
+
+def test_add_source_uses_file_type_and_mime_for_uploaded_pdf(monkeypatch):
+    """source_type=file 時に --type file / --mime-type / --title が渡る。"""
+    captured: dict = {}
+
+    def fake_run(cmd, **kwargs):  # noqa: ARG001
+        captured["cmd"] = list(cmd)
+        return _FakeProc(stdout='{"source": {"id": "src-file-1", "type": "file"}}')
+
+    monkeypatch.setattr(generate_podcast, "_run", fake_run)
+    sid = generate_podcast.add_source(
+        "nb-1",
+        "/tmp/build/pdfs/2405.12345.pdf",
+        source_type="file",
+        mime_type="application/pdf",
+        title="Some Paper Title",
+    )
+    assert sid == "src-file-1"
+    cmd = captured["cmd"]
+    # ファイルパスが直接渡されている
+    assert "/tmp/build/pdfs/2405.12345.pdf" in cmd
+    # --type file
+    type_idx = cmd.index("--type")
+    assert cmd[type_idx + 1] == "file"
+    # --mime-type application/pdf
+    assert "--mime-type" in cmd
+    mime_idx = cmd.index("--mime-type")
+    assert cmd[mime_idx + 1] == "application/pdf"
+    # --title
+    assert "--title" in cmd
+    title_idx = cmd.index("--title")
+    assert cmd[title_idx + 1] == "Some Paper Title"
 
 
 # ---- _extract_task_id_from_error -----------------------------------------
@@ -437,41 +474,167 @@ def test_add_source_reraises_rate_limit(monkeypatch):
         generate_podcast.add_source("nb-1", "https://arxiv.org/pdf/x")
 
 
-# ---- generate_audio_overview: NotebookLM へ渡すのは PDF URL --------------
+# ---- _download_pdf -------------------------------------------------------
 
 
-def test_generate_audio_overview_passes_pdf_url_to_add_source(
+class _FakeStreamResponse:
+    """`requests.get(stream=True)` の最小モック。with context として動く。"""
+
+    def __init__(self, content: bytes, status_code: int = 200):
+        self._content = content
+        self.status_code = status_code
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc_info):  # noqa: ARG002
+        return False
+
+    def raise_for_status(self):
+        if self.status_code >= 400:
+            err = __import__("requests").HTTPError(f"HTTP {self.status_code}")
+            err.response = self  # type: ignore[attr-defined]
+            raise err
+
+    def iter_content(self, chunk_size: int = 8192):
+        view = memoryview(self._content)
+        for i in range(0, len(view), chunk_size):
+            yield bytes(view[i : i + chunk_size])
+
+
+def _make_paper(arxiv_id: str = "2405.00001") -> "generate_podcast.ArxivPaper":
+    from datetime import datetime, timezone
+    return generate_podcast.ArxivPaper(
+        arxiv_id=arxiv_id,
+        title=f"Title {arxiv_id}",
+        authors=["A"],
+        abstract="abs",
+        abs_url=f"https://arxiv.org/abs/{arxiv_id}",
+        pdf_url=f"https://arxiv.org/pdf/{arxiv_id}",
+        published=datetime(2026, 5, 27, tzinfo=timezone.utc),
+        primary_category="cs.AI",
+    )
+
+
+def test_download_pdf_writes_file_under_arxiv_id_name(monkeypatch, tmp_path):
+    paper = _make_paper("2405.00042")
+    content = b"%PDF-1.4 fake body" + b"x" * 1024
+
+    captured: dict = {}
+
+    def fake_get(url, **kwargs):
+        captured["url"] = url
+        captured["stream"] = kwargs.get("stream")
+        captured["timeout"] = kwargs.get("timeout")
+        return _FakeStreamResponse(content)
+
+    monkeypatch.setattr(generate_podcast.requests, "get", fake_get)
+
+    dest = generate_podcast._download_pdf(paper, tmp_path)
+    assert dest == tmp_path / "2405.00042.pdf"
+    assert dest.read_bytes() == content
+    assert captured["url"] == paper.pdf_url
+    assert captured["stream"] is True
+    # config の値を尊重しているか
+    assert captured["timeout"] == generate_podcast.config.PDF_DOWNLOAD_TIMEOUT_SECONDS
+
+
+def test_download_pdf_raises_arxiv_rate_limit_on_429(monkeypatch, tmp_path):
+    paper = _make_paper()
+
+    def fake_get(url, **kwargs):  # noqa: ARG001
+        return _FakeStreamResponse(b"", status_code=429)
+
+    monkeypatch.setattr(generate_podcast.requests, "get", fake_get)
+    # リトライ間 sleep を消す
+    monkeypatch.setattr(generate_podcast.time, "sleep", lambda s: None)
+
+    with pytest.raises(generate_podcast.ArxivRateLimitError) as exc_info:
+        generate_podcast._download_pdf(paper, tmp_path)
+    assert exc_info.value.status == 429
+
+
+def test_download_pdf_raises_arxiv_rate_limit_on_503(monkeypatch, tmp_path):
+    paper = _make_paper()
+
+    def fake_get(url, **kwargs):  # noqa: ARG001
+        return _FakeStreamResponse(b"", status_code=503)
+
+    monkeypatch.setattr(generate_podcast.requests, "get", fake_get)
+    monkeypatch.setattr(generate_podcast.time, "sleep", lambda s: None)
+
+    with pytest.raises(generate_podcast.ArxivRateLimitError) as exc_info:
+        generate_podcast._download_pdf(paper, tmp_path)
+    assert exc_info.value.status == 503
+
+
+def test_download_pdf_aborts_when_exceeding_size_cap(monkeypatch, tmp_path):
+    paper = _make_paper("2405.toolarge")
+    # 1MB に絞って簡単に上限を超えさせる
+    monkeypatch.setattr(
+        generate_podcast.config, "PDF_DOWNLOAD_MAX_SIZE_MB", 1
+    )
+    huge = b"x" * (2 * 1024 * 1024)  # 2MB
+
+    def fake_get(url, **kwargs):  # noqa: ARG001
+        return _FakeStreamResponse(huge)
+
+    monkeypatch.setattr(generate_podcast.requests, "get", fake_get)
+    monkeypatch.setattr(generate_podcast.time, "sleep", lambda s: None)
+
+    with pytest.raises(generate_podcast.NotebookLMError, match="exceeded"):
+        generate_podcast._download_pdf(paper, tmp_path)
+    # 部分書き込みファイルは残さない
+    assert not (tmp_path / "2405.toolarge.pdf").exists()
+
+
+def test_download_pdf_retries_then_succeeds(monkeypatch, tmp_path):
+    paper = _make_paper("2405.flaky")
+    content = b"ok" * 100
+    calls = {"n": 0}
+
+    def fake_get(url, **kwargs):  # noqa: ARG001
+        calls["n"] += 1
+        if calls["n"] < 2:
+            raise generate_podcast.requests.ConnectionError("transient")
+        return _FakeStreamResponse(content)
+
+    monkeypatch.setattr(generate_podcast.requests, "get", fake_get)
+    sleeps: list[float] = []
+    monkeypatch.setattr(generate_podcast.time, "sleep", lambda s: sleeps.append(s))
+
+    dest = generate_podcast._download_pdf(paper, tmp_path)
+    assert dest.read_bytes() == content
+    assert calls["n"] == 2
+    # 1回バックオフして再試行している
+    assert len(sleeps) == 1
+
+
+def test_download_pdf_raises_notebooklm_error_after_all_retries(monkeypatch, tmp_path):
+    paper = _make_paper("2405.dead")
+
+    def fake_get(url, **kwargs):  # noqa: ARG001
+        raise generate_podcast.requests.ConnectionError("dead host")
+
+    monkeypatch.setattr(generate_podcast.requests, "get", fake_get)
+    monkeypatch.setattr(generate_podcast.time, "sleep", lambda s: None)
+
+    with pytest.raises(generate_podcast.NotebookLMError, match="failed to download"):
+        generate_podcast._download_pdf(paper, tmp_path)
+
+
+# ---- generate_audio_overview: PDF をダウンロードしてからファイル送付 ------
+
+
+def test_generate_audio_overview_downloads_pdfs_then_uploads_files(
     monkeypatch, tmp_path
 ):
-    """abstract URL ではなく PDF URL を NotebookLM に渡すことを保証。
-
-    abs URL を渡すと NotebookLM がアブストラクトだけしか読まず、ポッドキャスト
-    の内容が薄くなる回帰を防ぐためのガード。
+    """abs/PDF URL ではなくローカルファイルパスを add_source に渡し、
+    終了時に PDF ディレクトリが片付くことを保証する。
     """
-    from datetime import date, timezone
+    from datetime import date
 
-    papers = [
-        generate_podcast.ArxivPaper(
-            arxiv_id="2405.00001",
-            title="T1",
-            authors=["A"],
-            abstract="abs",
-            abs_url="https://arxiv.org/abs/2405.00001",
-            pdf_url="https://arxiv.org/pdf/2405.00001",
-            published=__import__("datetime").datetime(2026, 5, 27, tzinfo=timezone.utc),
-            primary_category="cs.AI",
-        ),
-        generate_podcast.ArxivPaper(
-            arxiv_id="2405.00002",
-            title="T2",
-            authors=["B"],
-            abstract="abs2",
-            abs_url="https://arxiv.org/abs/2405.00002",
-            pdf_url="https://arxiv.org/pdf/2405.00002",
-            published=__import__("datetime").datetime(2026, 5, 27, tzinfo=timezone.utc),
-            primary_category="cs.LG",
-        ),
-    ]
+    papers = [_make_paper("2405.00001"), _make_paper("2405.00002")]
 
     monkeypatch.setattr(generate_podcast, "restore_storage_state", lambda: None)
     monkeypatch.setattr(generate_podcast, "set_language", lambda code="ja": None)
@@ -479,11 +642,37 @@ def test_generate_audio_overview_passes_pdf_url_to_add_source(
         generate_podcast, "create_notebook", lambda title: "nb-fake"
     )
 
-    captured_urls: list[str] = []
+    pdf_dir = tmp_path / "pdfs"
+    monkeypatch.setattr(generate_podcast.config, "PDF_DOWNLOAD_DIR", pdf_dir)
+    # download 間隔の sleep は飛ばす
+    monkeypatch.setattr(generate_podcast.time, "sleep", lambda s: None)
 
-    def fake_add_source(notebook_id, url):  # noqa: ARG001
-        captured_urls.append(url)
-        return f"src-{len(captured_urls)}"
+    download_calls: list[str] = []
+
+    def fake_download_pdf(paper, dest_dir):
+        download_calls.append(paper.arxiv_id)
+        dest_dir.mkdir(parents=True, exist_ok=True)
+        path = dest_dir / f"{paper.arxiv_id}.pdf"
+        path.write_bytes(b"%PDF-fake")
+        return path
+
+    monkeypatch.setattr(generate_podcast, "_download_pdf", fake_download_pdf)
+
+    add_source_calls: list[dict] = []
+
+    def fake_add_source(
+        notebook_id, content, *, source_type="url",
+        mime_type=None, title=None,
+    ):  # noqa: ARG001
+        add_source_calls.append(
+            {
+                "content": content,
+                "source_type": source_type,
+                "mime_type": mime_type,
+                "title": title,
+            }
+        )
+        return f"src-{len(add_source_calls)}"
 
     monkeypatch.setattr(generate_podcast, "add_source", fake_add_source)
     monkeypatch.setattr(
@@ -499,20 +688,132 @@ def test_generate_audio_overview_passes_pdf_url_to_add_source(
 
     output = tmp_path / "ep.mp3"
 
-    def fake_download(notebook_id, path):  # noqa: ARG001
+    def fake_download_audio(notebook_id, path):  # noqa: ARG001
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_bytes(b"\x00" * 2048)
         return path
 
-    monkeypatch.setattr(generate_podcast, "download_audio", fake_download)
+    monkeypatch.setattr(generate_podcast, "download_audio", fake_download_audio)
 
     result = generate_podcast.generate_audio_overview(
         papers, date(2026, 5, 27), output_path=output
     )
     assert result == output
-    assert captured_urls == [p.pdf_url for p in papers]
-    # 念のため abs_url が紛れ込んでいないことも確認
-    assert not any("/abs/" in u for u in captured_urls)
+
+    # 各 paper につき 1 回ずつダウンロード
+    assert download_calls == [p.arxiv_id for p in papers]
+
+    # add_source にはローカルファイルパス文字列 + type=file が渡る
+    assert len(add_source_calls) == len(papers)
+    for call, paper in zip(add_source_calls, papers):
+        assert call["source_type"] == "file"
+        assert call["mime_type"] == "application/pdf"
+        assert call["content"] == str(pdf_dir / f"{paper.arxiv_id}.pdf")
+        # URL は渡されていない
+        assert "://" not in call["content"]
+        assert call["title"] == paper.title
+
+    # 後始末で PDF ディレクトリが消えている
+    assert not pdf_dir.exists()
+
+
+def test_generate_audio_overview_skips_paper_on_download_failure(
+    monkeypatch, tmp_path
+):
+    """個別の PDF ダウンロード失敗は warning ログでスキップし、残りで続行。"""
+    from datetime import date
+
+    papers = [_make_paper("2405.00001"), _make_paper("2405.00002")]
+
+    monkeypatch.setattr(generate_podcast, "restore_storage_state", lambda: None)
+    monkeypatch.setattr(generate_podcast, "set_language", lambda code="ja": None)
+    monkeypatch.setattr(
+        generate_podcast, "create_notebook", lambda title: "nb-fake"
+    )
+    pdf_dir = tmp_path / "pdfs"
+    monkeypatch.setattr(generate_podcast.config, "PDF_DOWNLOAD_DIR", pdf_dir)
+    monkeypatch.setattr(generate_podcast.time, "sleep", lambda s: None)
+
+    def fake_download_pdf(paper, dest_dir):
+        if paper.arxiv_id == "2405.00001":
+            raise generate_podcast.NotebookLMError("transient I/O")
+        dest_dir.mkdir(parents=True, exist_ok=True)
+        path = dest_dir / f"{paper.arxiv_id}.pdf"
+        path.write_bytes(b"ok")
+        return path
+
+    monkeypatch.setattr(generate_podcast, "_download_pdf", fake_download_pdf)
+
+    add_source_calls: list[str] = []
+
+    def fake_add_source(
+        notebook_id, content, *, source_type="url",
+        mime_type=None, title=None,
+    ):  # noqa: ARG001
+        add_source_calls.append(content)
+        return f"src-{len(add_source_calls)}"
+
+    monkeypatch.setattr(generate_podcast, "add_source", fake_add_source)
+    monkeypatch.setattr(
+        generate_podcast,
+        "wait_for_source",
+        lambda notebook_id, source_id, *, timeout: True,
+    )
+    monkeypatch.setattr(
+        generate_podcast,
+        "generate_audio",
+        lambda notebook_id, instruction, *, language="ja": None,
+    )
+
+    output = tmp_path / "ep.mp3"
+    monkeypatch.setattr(
+        generate_podcast,
+        "download_audio",
+        lambda nb, path: (
+            path.parent.mkdir(parents=True, exist_ok=True),
+            path.write_bytes(b"\x00" * 2048),
+            path,
+        )[-1],
+    )
+
+    generate_podcast.generate_audio_overview(
+        papers, date(2026, 5, 27), output_path=output
+    )
+
+    # 失敗した 1 本は add_source されず、残り 1 本だけ
+    assert len(add_source_calls) == 1
+    assert add_source_calls[0].endswith("2405.00002.pdf")
+
+
+def test_generate_audio_overview_propagates_arxiv_rate_limit(
+    monkeypatch, tmp_path
+):
+    """arxiv 側で 429/503 が出たら個別スキップではなく上位へ伝播。"""
+    from datetime import date
+
+    papers = [_make_paper("2405.00001"), _make_paper("2405.00002")]
+
+    monkeypatch.setattr(generate_podcast, "restore_storage_state", lambda: None)
+    monkeypatch.setattr(generate_podcast, "set_language", lambda code="ja": None)
+    monkeypatch.setattr(
+        generate_podcast, "create_notebook", lambda title: "nb-fake"
+    )
+    monkeypatch.setattr(
+        generate_podcast.config, "PDF_DOWNLOAD_DIR", tmp_path / "pdfs"
+    )
+    monkeypatch.setattr(generate_podcast.time, "sleep", lambda s: None)
+
+    def fake_download_pdf(paper, dest_dir):  # noqa: ARG001
+        raise generate_podcast.ArxivRateLimitError(
+            "HTTP 429 after retries", status=429
+        )
+
+    monkeypatch.setattr(generate_podcast, "_download_pdf", fake_download_pdf)
+
+    with pytest.raises(generate_podcast.ArxivRateLimitError):
+        generate_podcast.generate_audio_overview(
+            papers, date(2026, 5, 27), output_path=tmp_path / "ep.mp3"
+        )
 
 
 # ---- restore_storage_state logging --------------------------------------
