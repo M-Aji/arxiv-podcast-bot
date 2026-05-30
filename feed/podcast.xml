@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Sat, 30 May 2026 03:33:58 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 30 May 2026 22:15:39 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-05-31</title>
+      <description>本日の注目論文：
+
+1. Self-Trained Verification for Training- and Test-Time Self-Improvement — Chen Henry Wu, Aditi Raghunathan
+   https://arxiv.org/abs/2605.30290
+2. Gram: Assessing sabotage propensities via automated alignment auditing — David Lindner, Victoria Krakovna et al.
+   https://arxiv.org/abs/2605.30322
+3. ProjectionBench: Evaluating Scientific Hypothesis Generation in LLMs Under Progressive Information Disclosure — A. J. Lew, Y. Cao et al.
+   https://arxiv.org/abs/2605.30284
+4. Reasoning with Sampling: Cutting at Decision Points — Felix Zhou, Anay Mehrotra et al.
+   https://arxiv.org/abs/2605.30327
+5. Physics Is All You Need? A Case Study in Physicist-Supervised AI Development of Scientific Software — Nhat-Minh Nguyen
+   https://arxiv.org/abs/2605.30353</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-05-31</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-05-31/episode.mp3" length="37354317" type="audio/mpeg"/>
+      <pubDate>Sun, 31 May 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-05-30</title>
       <description>本日の注目論文：
