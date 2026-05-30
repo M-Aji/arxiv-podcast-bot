@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Wed, 27 May 2026 22:59:20 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 30 May 2026 03:33:58 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-05-30</title>
+      <description>本日の注目論文：
+
+1. SoundnessBench: Can Your AI Scientist Really Tell Good Research Ideas from Bad Ones? — Sy-Tuyen Ho, Minghui Liu et al.
+   https://arxiv.org/abs/2605.30329
+2. Improved Guarantees for Heterogeneous Treatment-Effect Estimation via Matrix Completion — Anay Mehrotra, Phuc Tran et al.
+   https://arxiv.org/abs/2605.30319
+3. LLMSurgeon: Diagnosing Data Mixture of Large Language Models — Yaxin Luo, Jiacheng Cui et al.
+   https://arxiv.org/abs/2605.30348
+4. Unlocking the Working Memory of Large Language Models for Latent Reasoning — Lukas Aichberger, Sepp Hochreiter
+   https://arxiv.org/abs/2605.30343
+5. In-Context Reward Adaptation for Robust Preference Modeling — Zhenyu Sun, Zheng Xu et al.
+   https://arxiv.org/abs/2605.30323</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-05-30</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-05-30/episode.mp3" length="36714620" type="audio/mpeg"/>
+      <pubDate>Sat, 30 May 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-05-28</title>
       <description>本日の注目論文：
