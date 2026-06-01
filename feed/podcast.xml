@@ -13,7 +13,7 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Sun, 31 May 2026 22:25:07 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 01 Jun 2026 12:32:57 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
@@ -23,18 +23,18 @@
       <title>arXiv 2026-06-01</title>
       <description>本日の注目論文：
 
-1. LLUMI: Improving LLM Writing Assistance for Mental Health Support with Online Community Feedback — Jiwon Kim, Maya Ajit et al.
-   https://arxiv.org/abs/2605.30273
-2. Tiny but Trusted: Efficient Vision-Language Reasoning for Time-Series Anomaly Detection — Xiaona Zhou, Muntasir Wahed et al.
-   https://arxiv.org/abs/2605.30344
-3. Locally Coherent, Globally Incoherent: Bounding Compositional Incoherence in Multi-Component LLM Agents — Anany Kotawala
-   https://arxiv.org/abs/2605.30335
-4. RoboWits: Unexpected Challenges for Robotic Creative Problem Solving — Chunru Lin, Hongxin Zhang et al.
-   https://arxiv.org/abs/2605.30326
-5. mcp-proto-okn: Natural-language access to open scientific knowledge graphs through the Model Context Protocol — Peter W. Rose, Benjamin M. Good et al.
-   https://arxiv.org/abs/2605.30283</description>
+1. Stateful Online Monitoring Catches Distributed Agent Attacks — Davis Brown, Samarth Bhargav et al.
+   https://arxiv.org/abs/2605.31593
+2. LongTraceRL: Learning Long-Context Reasoning from Search Agent Trajectories with Rubric Rewards — Nianyi Lin, Jiajie Zhang et al.
+   https://arxiv.org/abs/2605.31584
+3. Disagreeing Rationales: Rethinking Classification and Explainability Evaluation in Hate Speech Detection — Benedetta Muscato, Beiduo Chen et al.
+   https://arxiv.org/abs/2605.31563
+4. Effects of Vertex Merging &amp; Splitting on Large Coauthorship Networks: A Counterfactual Analysis — Jinseok Kim
+   https://arxiv.org/abs/2605.31555
+5. Giving Sensors a Voice: Multimodal JEPA for Semantic Time-Series Embeddings — Utsav Dutta, Gerardo Pastrana et al.
+   https://arxiv.org/abs/2605.31580</description>
       <guid isPermaLink="false">arxiv-podcast-2026-06-01</guid>
-      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-06-01/episode.mp3" length="39857772" type="audio/mpeg"/>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-06-01/episode.mp3" length="37598715" type="audio/mpeg"/>
       <pubDate>Mon, 01 Jun 2026 06:00:00 +0900</pubDate>
       <itunes:explicit>no</itunes:explicit>
     </item>
