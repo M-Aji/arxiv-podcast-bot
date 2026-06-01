@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Mon, 01 Jun 2026 12:32:57 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 01 Jun 2026 23:27:39 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-06-02</title>
+      <description>本日の注目論文：
+
+1. Skill Reuse as Compression in Agentic RL — Zhikun Xu, Yu Feng et al.
+   https://arxiv.org/abs/2605.31509
+2. Evaluating Factual Density in Multi-Source RAG: A Study in Medical AI Accuracy — Michael R. DeMarco
+   https://arxiv.org/abs/2605.31506
+3. Language Models Learn Constructional Semantics, Not To Mention Syntax: Investigating LM Understanding of Paired-Focus Constructions — Wesley Scivetti, Ethan Wilcox et al.
+   https://arxiv.org/abs/2605.31586
+4. What Gets Unmasked First? Trajectory Analysis of Diffusion Models for Graph-to-Text Generation — Qing Wang, Jacob Devasier et al.
+   https://arxiv.org/abs/2605.31564
+5. What Am I Missing? Question-Answering as Hidden State Probing — Chu Fei Luo, Samuel Dahan et al.
+   https://arxiv.org/abs/2605.31561</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-06-02</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-06-02/episode.mp3" length="32620088" type="audio/mpeg"/>
+      <pubDate>Tue, 02 Jun 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-06-01</title>
       <description>本日の注目論文：
