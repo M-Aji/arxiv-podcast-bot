@@ -1,12 +1,25 @@
 """rank_papers: Claude Haiku モックでスコアリング挙動を検証する。"""
 from __future__ import annotations
 
+import os
 from datetime import datetime, timezone
 
 import pytest
 
 from src import config, rank_papers
 from src.fetch_arxiv import ArxivPaper
+
+# 応用接続バイアスを再評価する live API テスト。Claude Haiku を実際に叩くので
+# 通常 CI では走らせない。`RUN_RANKING_INTEGRATION=1` のとき、かつ
+# ANTHROPIC_API_KEY が設定されているときのみ実行。
+_LIVE_RANKING = pytest.mark.skipif(
+    not os.environ.get("RUN_RANKING_INTEGRATION")
+    or not os.environ.get(config.ANTHROPIC_API_KEY_ENV),
+    reason=(
+        "set RUN_RANKING_INTEGRATION=1 and ANTHROPIC_API_KEY=... to run "
+        "live Anthropic API tests against the ranking prompt"
+    ),
+)
 
 
 # ---- ヘルパー -------------------------------------------------------------
@@ -335,6 +348,138 @@ def test_select_top_n_handles_fewer_candidates_than_n():
 
 def test_select_top_n_on_empty_input():
     assert rank_papers.select_top_n([], 5) == []
+
+
+# ---- system prompt の内容ガード ------------------------------------------
+#
+# 応用接続バイアスは prompt 文言と config プロファイルに依存する。文言の
+# 退行（例: リファクタで「応用接続」キーワードが消える）を素早く検知する。
+
+
+def test_system_prompt_mentions_applied_connection_and_cross_domain():
+    """応用接続・クロスドメインを評価軸に書いている。"""
+    prompt = rank_papers._system_prompt()
+    assert "応用接続" in prompt
+    assert "クロスドメイン" in prompt
+    # 純粋技術論文を中評価に落とす指示が残っている
+    assert "ベンチマーク改善" in prompt
+
+
+def test_system_prompt_lists_applied_keyword_bonus():
+    """都市・交通系キーワード加点ルールの存在を保証。"""
+    prompt = rank_papers._system_prompt()
+    for kw in ("urban", "transportation", "mobility", "traffic", "policy"):
+        assert kw in prompt
+    # 加点幅の文言（リファクタで消えていないか）
+    assert "1.0〜1.5" in prompt or "1.0-1.5" in prompt
+
+
+def test_system_prompt_includes_interest_profile_principle_section():
+    """config 側に挿入した「選定の大原則」が prompt 経由でモデルに届く。"""
+    prompt = rank_papers._system_prompt()
+    assert "選定の大原則" in prompt
+    assert "応用研究者" in prompt
+
+
+# ---- ランキングの実挙動（live Claude Haiku 呼び出し） --------------------
+#
+# 応用接続バイアスが実際に効いているかは prompt 文言だけでは保証できない。
+# `RUN_RANKING_INTEGRATION=1` 環境下でのみ実 API を叩き、4 つの境界ケースで
+# 想定通りのスコア帯に落ちるかを確認する。
+
+
+def _live_score(paper: ArxivPaper) -> float:
+    """Anthropic を実際に叩いて 1 本だけスコアリング。"""
+    client = rank_papers._build_client()
+    return rank_papers._score_single_paper(client, paper).score
+
+
+@_LIVE_RANKING
+def test_pure_llm_benchmark_paper_scores_below_7():
+    """純粋なLLMベンチマーク改善論文は応用接続が薄いので中評価以下。"""
+    paper = _paper(
+        "live.1",
+        title=(
+            "Improving GSM8K and MATH benchmark scores via chain-of-thought "
+            "prompt tuning for large language models"
+        ),
+        abstract=(
+            "We propose a novel prompt-tuning strategy that improves LLM "
+            "performance on the GSM8K and MATH reasoning benchmarks by 3.2 "
+            "points without additional training data. Extensive ablation on "
+            "Llama-3 70B and GPT-4 demonstrates state-of-the-art benchmark "
+            "results. No real-world or social application is discussed."
+        ),
+    )
+    score = _live_score(paper)
+    assert score < 7.0, f"expected <7.0 for pure benchmark paper, got {score}"
+
+
+@_LIVE_RANKING
+def test_llm_traffic_simulation_paper_scores_at_least_8():
+    """LLM × 交通シミュレーションのクロスドメイン研究は上位帯。"""
+    paper = _paper(
+        "live.2",
+        title=(
+            "LLM-Driven Multi-Agent Traffic Simulation for Urban "
+            "Congestion Policy Evaluation"
+        ),
+        abstract=(
+            "We integrate large language model agents with a microscopic "
+            "traffic simulator to model driver decision-making in urban "
+            "networks. Agents reason about route choice, congestion, and "
+            "policy interventions (congestion pricing, signal retiming) "
+            "using natural-language deliberation. Applied to a real city "
+            "OD dataset, the framework reproduces observed mode share and "
+            "is used to forecast the effect of pricing policies."
+        ),
+    )
+    score = _live_score(paper)
+    assert score >= 8.0, f"expected >=8.0 for LLM×traffic paper, got {score}"
+
+
+@_LIVE_RANKING
+def test_urban_policy_ml_application_scores_at_least_7():
+    """都市政策の機械学習応用は上位寄り。"""
+    paper = _paper(
+        "live.3",
+        title=(
+            "Predicting the Equity Impact of Zoning Reform with Spatial "
+            "Machine Learning on Census and Mobility Data"
+        ),
+        abstract=(
+            "We build a spatial gradient-boosted model on US Census, ACS, "
+            "and smartphone-derived mobility data to estimate the "
+            "neighborhood-level equity impact of recent zoning reforms. "
+            "The framework is applied to three metropolitan areas and "
+            "informs ongoing urban planning policy debates around housing "
+            "supply and displacement."
+        ),
+    )
+    score = _live_score(paper)
+    assert score >= 7.0, f"expected >=7.0 for urban-policy ML paper, got {score}"
+
+
+@_LIVE_RANKING
+def test_pure_math_optimization_paper_scores_below_4():
+    """純粋な数学最適化論文は低スコア帯。"""
+    paper = _paper(
+        "live.4",
+        title=(
+            "Tight convergence rates for accelerated proximal gradient "
+            "methods on strongly convex composite optimization"
+        ),
+        abstract=(
+            "We prove tight non-asymptotic convergence rates for an "
+            "accelerated proximal gradient algorithm on strongly convex "
+            "composite minimization problems. Our analysis improves upon "
+            "the best previously known constants and extends to a wider "
+            "class of regularizers. The contribution is purely theoretical; "
+            "no empirical evaluation or application is provided."
+        ),
+    )
+    score = _live_score(paper)
+    assert score < 4.0, f"expected <4.0 for pure math paper, got {score}"
 
 
 if __name__ == "__main__":  # pragma: no cover
