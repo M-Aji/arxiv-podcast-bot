@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Mon, 01 Jun 2026 23:27:39 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 02 Jun 2026 23:38:52 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-06-03</title>
+      <description>本日の注目論文：
+
+1. Bridging the Last Mile of Time Series Forecasting with LLM Agents — Yuhua Liao, Zetian Wang et al.
+   https://arxiv.org/abs/2606.02497
+2. Monitoring Agentic Systems Before They're Reliable — Marisa Ferrara Boston, Glen Hanson et al.
+   https://arxiv.org/abs/2606.02494
+3. A No-Regret Framework for Adaptive Incentive Design — Georgios Vasileiou, Lantian Zhang et al.
+   https://arxiv.org/abs/2606.02529
+4. Auditing Asset-Specific Preferences in Financial Large Language Models: Evidence from Bitcoin Representations and Portfolio Allocation — Wenbin Wu
+   https://arxiv.org/abs/2606.02528
+5. FigSIM: A Dataset for Fine-grained Suicide Severity and Figurative Language in Suicide Memes — Liuliu Chen, Elise R. Carrotte et al.
+   https://arxiv.org/abs/2606.02523</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-06-03</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-06-03/episode.mp3" length="28039865" type="audio/mpeg"/>
+      <pubDate>Wed, 03 Jun 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-06-02</title>
       <description>本日の注目論文：
