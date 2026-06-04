@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Wed, 03 Jun 2026 23:21:40 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 04 Jun 2026 22:45:43 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-06-05</title>
+      <description>本日の注目論文：
+
+1. Towards Efficient and Evidence-grounded Mobility Prediction with LLM-Driven Agent — Linyao Chen, Qinlao Zhao et al.
+   https://arxiv.org/abs/2606.05130
+2. Does Artificial Intelligence Advance Science? — Liangping Ding, Cornelia Lawson et al.
+   https://arxiv.org/abs/2606.05118
+3. An Open-Source Two-Stage Computer Vision Pipeline for Fine-Grained Vehicle Classification using Vision Transformers — Gandhimathi Padmanaban, Fred Feng
+   https://arxiv.org/abs/2606.05149
+4. Preserving Data Privacy in Learning Causal Structure with Fully Homomorphic Encryption — Jian Yang, Yuan Tong et al.
+   https://arxiv.org/abs/2606.05129
+5. Reinforcement Learning from Rich Feedback with Distributional DAgger — Rishabh Agrawal, Jacob Fein-Ashley et al.
+   https://arxiv.org/abs/2606.05152</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-06-05</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-06-05/episode.mp3" length="44334093" type="audio/mpeg"/>
+      <pubDate>Fri, 05 Jun 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-06-04</title>
       <description>本日の注目論文：
