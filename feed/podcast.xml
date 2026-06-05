@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Thu, 04 Jun 2026 22:45:43 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 05 Jun 2026 22:34:13 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-06-06</title>
+      <description>本日の注目論文：
+
+1. RiskFlow: Fast and Faithful Safety-Critical Traffic Scenario Generation — Qi Lan, Yining Tang et al.
+   https://arxiv.org/abs/2606.06423
+2. Revising Context, Shifting Simulated Stance: Auditing LLM-Based Stance Simulation in Online Discussions — Xinnong Zhang, Wanting Shan et al.
+   https://arxiv.org/abs/2606.06443
+3. Annotation of Positive vs Negative User Interactions for Social Sign Prediction — Biancamaria Bombino, Chiara Boldrini et al.
+   https://arxiv.org/abs/2606.06425
+4. Will the Agent Recuse Itself? Measuring LLM-Agent Compliance with In-Band Access-Deny Signals — Thamilvendhan Munirathinam
+   https://arxiv.org/abs/2606.06460
+5. MLEvolve: A Self-Evolving Framework for Automated Machine Learning Algorithm Discovery — Shangheng Du, Xiangchao Yan et al.
+   https://arxiv.org/abs/2606.06473</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-06-06</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-06-06/episode.mp3" length="28991193" type="audio/mpeg"/>
+      <pubDate>Sat, 06 Jun 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-06-05</title>
       <description>本日の注目論文：
