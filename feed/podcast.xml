@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Mon, 08 Jun 2026 22:58:50 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 09 Jun 2026 22:47:36 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-06-10</title>
+      <description>本日の注目論文：
+
+1. Human-Centred Risk Mitigation for AI-Mediated Information Manipulation: A SOCMINT Framework Based on Information Manipulation Sets — Antonio Scala
+   https://arxiv.org/abs/2606.09754
+2. Collaborative Human-Agent Protocol (CHAP) — Arsalan Shahid, Gordon Suttie et al.
+   https://arxiv.org/abs/2606.09751
+3. The Neutral Mask: How RLHF Provides Shallow Alignment while Leaving Partisan Structure Intact in a Large Language Model — Wendy K. Tam
+   https://arxiv.org/abs/2606.09735
+4. Causally Evaluating the Learnability of Formal Language Tasks — Vésteinn Snæbjarnarson, Anej Svete et al.
+   https://arxiv.org/abs/2606.09822
+5. SIGA: Self-Evolving Coding-Agent Adapters for Scientific Simulation — Matthew Ho, Brian Liu et al.
+   https://arxiv.org/abs/2606.09774</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-06-10</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-06-10/episode.mp3" length="37753352" type="audio/mpeg"/>
+      <pubDate>Wed, 10 Jun 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-06-09</title>
       <description>本日の注目論文：
