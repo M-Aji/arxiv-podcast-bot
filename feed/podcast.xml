@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Tue, 09 Jun 2026 22:47:36 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 10 Jun 2026 23:03:34 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-06-11</title>
+      <description>本日の注目論文：
+
+1. Data Journalist Agent: Transforming Data into Verifiable Multimodal Stories — Kevin Qinghong Lin, Batu EI et al.
+   https://arxiv.org/abs/2606.11176
+2. FADA: Accessible fetal ultrasound interpretation and annotation with a selectively distilled unified vision-language model — Mahmood Alzubaidi, Uzair Shah et al.
+   https://arxiv.org/abs/2606.11106
+3. Flaws in the LLM Automation Narrative — George Perrett, Javae Elliott et al.
+   https://arxiv.org/abs/2606.11166
+4. COGENT: Continuous Graph Emulators with Neural Ordinary Differential Equations for Long-Term Physical Forecasting — Zesheng Liu, Maryam Rahnemoonfar
+   https://arxiv.org/abs/2606.11162
+5. Monte Carlo Pass Search: Using Trajectory Generation for 3D Counterfactual Pass Evaluation in Football — Andrew Kang, Priya Narasimhan
+   https://arxiv.org/abs/2606.11120</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-06-11</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-06-11/episode.mp3" length="23124736" type="audio/mpeg"/>
+      <pubDate>Thu, 11 Jun 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-06-10</title>
       <description>本日の注目論文：
