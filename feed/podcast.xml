@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Wed, 10 Jun 2026 23:03:34 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 11 Jun 2026 23:01:12 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-06-12</title>
+      <description>本日の注目論文：
+
+1. Revealing Peri-Urban Dislocation through Percolation Analysis — Dr Melissa Barrientos-Trinanes, Professor Stephen Marshall et al.
+   https://arxiv.org/abs/2606.12399
+2. Should LLM Agents Decide in Social Simulations? Comparing Finite-State and LLM-Based Decision Policies — Alejandro Buitrago López, Javier Pastor-Galindo et al.
+   https://arxiv.org/abs/2606.12369
+3. DIRECT: When and Where Should You Allocate Test-Time Compute in Embodied Planners? — Jadelynn Dao, Milan Ganai et al.
+   https://arxiv.org/abs/2606.12402
+4. Which Models Are Our Models Built On? Auditing Invisible Dependencies in Modern LLMs — Sanjay Adhikesaven, Haoxiang Sun et al.
+   https://arxiv.org/abs/2606.12385
+5. CHORUS: Decentralized Multi-Embodiment Collaboration with One VLA Policy — Ria Doshi, Tian Gao et al.
+   https://arxiv.org/abs/2606.12352</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-06-12</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-06-12/episode.mp3" length="31012628" type="audio/mpeg"/>
+      <pubDate>Fri, 12 Jun 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-06-11</title>
       <description>本日の注目論文：
