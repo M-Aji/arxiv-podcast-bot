@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Fri, 12 Jun 2026 22:39:43 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 13 Jun 2026 22:19:28 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-06-14</title>
+      <description>本日の注目論文：
+
+1. Multi-Agent Reinforcement Learning from Delayed Marketplace Feedback for Objective-Weight Adaptation in Three-Sided Dispatch — Haochen Wu, Yi Hou et al.
+   https://arxiv.org/abs/2606.13604
+2. Before You Think: System 0, AI-Mediated Cognition and Cognitive Colonization — Marianna Bergamaschi Ganapini, Massimo Chiriatti et al.
+   https://arxiv.org/abs/2606.13658
+3. A model of local and global reciprocity — Mari Kawakatsu, Yohsuke Murase et al.
+   https://arxiv.org/abs/2606.13678
+4. HyperTool: Beyond Step-Wise Tool Calls for Tool-Augmented Agents — Yaxin Du, Yifan Zhou et al.
+   https://arxiv.org/abs/2606.13663
+5. EurekAgent: Agent Environment Engineering is All You Need For Autonomous Scientific Discovery — Amy Xin, Jiening Siow et al.
+   https://arxiv.org/abs/2606.13662</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-06-14</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-06-14/episode.mp3" length="30230994" type="audio/mpeg"/>
+      <pubDate>Sun, 14 Jun 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-06-13</title>
       <description>本日の注目論文：
