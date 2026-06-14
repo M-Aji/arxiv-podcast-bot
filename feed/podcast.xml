@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Sat, 13 Jun 2026 22:19:28 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 14 Jun 2026 22:29:42 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-06-15</title>
+      <description>本日の注目論文：
+
+1. The Tone of Awareness: Topic, Sentiment, and Toxicity Maps During Mental Health Month on TikTok — Henrique Ferraz de Arruda, Andreia Sofia Teixeira et al.
+   https://arxiv.org/abs/2606.13581
+2. Tuning Agent-Based Predator-Prey Models Toward Lotka-Volterra Dynamics — Corinna Mandl, Siddharth Chaturvedi et al.
+   https://arxiv.org/abs/2606.13639
+3. One Polluted Page Is Enough: Evaluating Web Content Pollution in Generative Recommenders — Minghao Luo, Liang Chen
+   https://arxiv.org/abs/2606.13610
+4. AgentBeats: Agentifying Agent Assessment for Openness, Standardization, and Reproducibility — Xiaoyuan Liu, Jianhong Tu et al.
+   https://arxiv.org/abs/2606.13608
+5. Reward Modeling for Multi-Agent Orchestration — King Yeung Tsang, Zihao Zhao et al.
+   https://arxiv.org/abs/2606.13598</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-06-15</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-06-15/episode.mp3" length="33688701" type="audio/mpeg"/>
+      <pubDate>Mon, 15 Jun 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-06-14</title>
       <description>本日の注目論文：
