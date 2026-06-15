@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Sun, 14 Jun 2026 22:29:42 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 15 Jun 2026 23:19:32 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-06-16</title>
+      <description>本日の注目論文：
+
+1. Abstracting Cross-Domain Action Sequences into Interpretable Workflows — Gaurav Verma, Scott Counts
+   https://arxiv.org/abs/2606.14654
+2. Robust Network Flow Interdiction Problems with Applications to Counter-Narcotics — Diksha Gupta, Madhav Marathe et al.
+   https://arxiv.org/abs/2606.14611
+3. Learning Coordinated Preference for Multi-Objective Multi-Agent Reinforcement Learning — Pengxin Wang, Lihao Guo et al.
+   https://arxiv.org/abs/2606.14693
+4. AgentSpec: Understanding Embodied Agent Scaffolds Through Controlled Composition — Jixuan Chen, Jianzhi Shen et al.
+   https://arxiv.org/abs/2606.14674
+5. Towards Direct Latent-Space Synthesis for Parallel Branches in LLM-Agent Workflows — Shikun Liu, Mufei Li et al.
+   https://arxiv.org/abs/2606.14672</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-06-16</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-06-16/episode.mp3" length="25493777" type="audio/mpeg"/>
+      <pubDate>Tue, 16 Jun 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-06-15</title>
       <description>本日の注目論文：
