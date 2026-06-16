@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Mon, 15 Jun 2026 23:19:32 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 16 Jun 2026 23:11:02 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-06-17</title>
+      <description>本日の注目論文：
+
+1. From Tokens to Policy: Causal and Interpretable Heterogeneous Treatment Effects Identification — Riccardo Cadei, Frank Otchere et al.
+   https://arxiv.org/abs/2606.17010
+2. Filtered Conformal Ellipsoids for Graph-Native Time Series — Yannick Limmer
+   https://arxiv.org/abs/2606.17014
+3. Benchmarking LLM Agents on Meta-Analysis Articles from Nature Portfolio — Anzhe Xie, Weihang Su et al.
+   https://arxiv.org/abs/2606.17041
+4. Stable Menus of Public Goods: AI-Enabled Progress — Sara Fish
+   https://arxiv.org/abs/2606.16989
+5. Context-Aware RL for Agentic and Multimodal LLMs — Peiyang Xu, Bangzheng Li et al.
+   https://arxiv.org/abs/2606.17053</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-06-17</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-06-17/episode.mp3" length="37414827" type="audio/mpeg"/>
+      <pubDate>Wed, 17 Jun 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-06-16</title>
       <description>本日の注目論文：
