@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Tue, 16 Jun 2026 23:11:02 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 17 Jun 2026 23:01:59 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-06-18</title>
+      <description>本日の注目論文：
+
+1. IUU+DB: Tracking Illegal, Unreported, and Unregulated Fishing, Seafood Fraud, and Labor Abuse through LLM-driven Information Extraction — Henry Bodwell, Hong Yang et al.
+   https://arxiv.org/abs/2606.18181
+2. Strategies for preventing and reversing polarized online discourse — Leon Klingborg, Kenneth Mavor et al.
+   https://arxiv.org/abs/2606.18226
+3. ReproRepo: Scaling Reproducibility Audits with GitHub Repository Issues — Shanda Li, Qiuhong Anna Wei et al.
+   https://arxiv.org/abs/2606.18237
+4. RubricsTree: Scalable and Evolving Open-Ended Evaluation of Personal Health Agents across Health Memory and Medical Skills — Weizhi Zhang, Zechen Li et al.
+   https://arxiv.org/abs/2606.18203
+5. The Stanford EDGAR Filings Dataset: Reconstructing U.S. Corporate and Financial Disclosures into Layout-Faithful and Token-Efficient Pretraining Data — Nick Bettencourt, Xiaowei Ding et al.
+   https://arxiv.org/abs/2606.18192</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-06-18</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-06-18/episode.mp3" length="26463034" type="audio/mpeg"/>
+      <pubDate>Thu, 18 Jun 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-06-17</title>
       <description>本日の注目論文：
