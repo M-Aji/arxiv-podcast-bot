@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Wed, 17 Jun 2026 23:01:59 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 18 Jun 2026 23:10:19 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-06-19</title>
+      <description>本日の注目論文：
+
+1. Freeing the Law with LOCUS: A Local Ordinance Corpus for the United States — Denis Peskoff, Joe Barrow et al.
+   https://arxiv.org/abs/2606.19334
+2. Learning User Simulators with Turing Rewards — Yingshan Susan Wang, Cedegao E. Zhang et al.
+   https://arxiv.org/abs/2606.19336
+3. Enhancing Decision-Making with Large Language Models through Multi-Agent Fictitious Play — Leyang Shen, Yang Zhang et al.
+   https://arxiv.org/abs/2606.19308
+4. Correct Yourself, Keep My Trust: How Self-Correction and Social Connection Shape Credibility in Social Chatbots — Biswadeep Sen, Yi-Chieh Lee
+   https://arxiv.org/abs/2606.19286
+5. Native Active Perception as Reasoning for Omni-Modal Understanding — Zhenghao Xing, Ruiyang Xu et al.
+   https://arxiv.org/abs/2606.19341</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-06-19</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-06-19/episode.mp3" length="35663820" type="audio/mpeg"/>
+      <pubDate>Fri, 19 Jun 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-06-18</title>
       <description>本日の注目論文：
