@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Thu, 18 Jun 2026 23:10:19 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 19 Jun 2026 22:19:49 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-06-20</title>
+      <description>本日の注目論文：
+
+1. SARLO-80: Worldwide Slant SAR Language Optic Dataset 80cm — Solène Debuysère, Nicolas Trouvé et al.
+   https://arxiv.org/abs/2606.20523
+2. Contagion Networks: Evaluator Bias Propagation in Multi-Agent LLM Systems — Zewen Liu
+   https://arxiv.org/abs/2606.20493
+3. LedgerAgent: Structured State for Policy-Adherent Tool-Calling Agents — Md Nayem Uddin, Amir Saeidi et al.
+   https://arxiv.org/abs/2606.20529
+4. DeepSWIP: Quotient-WMC Counterfactuals for Neural Probabilistic Logic Programs — Saimun Habib, Vaishak Belle et al.
+   https://arxiv.org/abs/2606.20526
+5. What Do Safety-Aligned LLMs Learn From Mixed Compliance Demonstrations? — Sihui Dai, Mann Patel
+   https://arxiv.org/abs/2606.20508</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-06-20</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-06-20/episode.mp3" length="27218521" type="audio/mpeg"/>
+      <pubDate>Sat, 20 Jun 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-06-19</title>
       <description>本日の注目論文：
