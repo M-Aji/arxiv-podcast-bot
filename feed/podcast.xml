@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Fri, 19 Jun 2026 22:19:49 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 20 Jun 2026 22:24:41 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-06-21</title>
+      <description>本日の注目論文：
+
+1. Farmer Connect: Improving Farmers' Access to Produce Markets — Micheal Amanya, Darius Kainamura et al.
+   https://arxiv.org/abs/2606.20465
+2. Calibration Without Comprehension: Diagnosing the Limits of Fine-Tuning LLMs for Vulnerability Detection in Systems Software — Arastoo Zibaeirad, Marco Vieira
+   https://arxiv.org/abs/2606.20502
+3. UltraQuant: 4-bit KV Caching for Context-Heavy Agents — Inesh Chakrabarti, David Limpus et al.
+   https://arxiv.org/abs/2606.20474
+4. Analyzing Defensive Misdirection Against Model-Guided Automated Attacks on Agentic AI Systems — Reza Soosahabi, Vivek Namsani
+   https://arxiv.org/abs/2606.20470
+5. Beyond Global Replanning: Hierarchical Recovery for Cross-Device Agent Systems — Shu Yao, Yuhua Luo et al.
+   https://arxiv.org/abs/2606.20487</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-06-21</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-06-21/episode.mp3" length="33552740" type="audio/mpeg"/>
+      <pubDate>Sun, 21 Jun 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-06-20</title>
       <description>本日の注目論文：
