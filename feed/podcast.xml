@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Sun, 21 Jun 2026 22:32:44 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 22 Jun 2026 23:03:05 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-06-23</title>
+      <description>本日の注目論文：
+
+1. How Transparent is DiffusionGemma? — Joshua Engels, Callum McDougall et al.
+   https://arxiv.org/abs/2606.20560
+2. UNIEGO: Proxies as Mediators for Unified Egocentric Video Representation Learning — Wenhao Chi, Arkaprava Sinha et al.
+   https://arxiv.org/abs/2606.20559
+3. Optimal Deterministic Multicalibration and Omniprediction — Georgy Noarov, Aaron Roth
+   https://arxiv.org/abs/2606.20557
+4. The Token Is a Group Element: On Lie-Algebra Attention over Matrix Lie Groups — Przemyslaw Musialski
+   https://arxiv.org/abs/2606.20547
+5. Predictability as a Fine-Grained Measure for Privacy — Linda Lu, Karthik Sridharan
+   https://arxiv.org/abs/2606.20546</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-06-23</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-06-23/episode.mp3" length="42033897" type="audio/mpeg"/>
+      <pubDate>Tue, 23 Jun 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-06-22</title>
       <description>本日の注目論文：
