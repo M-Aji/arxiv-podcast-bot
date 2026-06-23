@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Mon, 22 Jun 2026 23:03:05 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 23 Jun 2026 22:32:13 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-06-24</title>
+      <description>本日の注目論文：
+
+1. AutoDex: An Automated Real-World System for Dexterous Grasping Data Collection — Mingi Choi, Gunhee Kim et al.
+   https://arxiv.org/abs/2606.23689
+2. Randomized YaRN Improves Length Generalization for Long-Context Reasoning — Manas Mehta, Fangcong Yin et al.
+   https://arxiv.org/abs/2606.23687
+3. CoorDex: Coordinating Body and Hand Priors for Continuous Dexterous Humanoid Loco-Manipulation — Sikai Li, Shuning Li et al.
+   https://arxiv.org/abs/2606.23680
+4. Semantic Browsing: Controllable Diversity for Image Generation — Sara Dorfman, Maya Vishnevsky et al.
+   https://arxiv.org/abs/2606.23679
+5. AIR: Adaptive Interleaved Reasoning with Code in MLLMs — Cong Han, Xiaohan Lan et al.
+   https://arxiv.org/abs/2606.23678</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-06-24</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-06-24/episode.mp3" length="32003549" type="audio/mpeg"/>
+      <pubDate>Wed, 24 Jun 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-06-23</title>
       <description>本日の注目論文：
