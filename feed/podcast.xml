@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Wed, 24 Jun 2026 22:34:51 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 25 Jun 2026 22:35:54 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-06-26</title>
+      <description>本日の注目論文：
+
+1. Learning Action Priors for Cross-embodiment Robot Manipulation — Dong Jing, Tianqi Zhang et al.
+   https://arxiv.org/abs/2606.26095
+2. RevengeBench: Reverse Engineering Code-Space Policies from Behavioral Experiments — Babak Rahmani, Sebastian Dziadzio et al.
+   https://arxiv.org/abs/2606.26094
+3. On-Policy Self-Distillation with Sampled Demonstrations Reduces Output Diversity — Andrei Liviu Nicolicioiu, Mohammad Pezeshki et al.
+   https://arxiv.org/abs/2606.26091
+4. Real-Time Voice AI Hears but Does Not Listen — Martijn Bartelds, Federico Bianchi et al.
+   https://arxiv.org/abs/2606.26083
+5. Neglected Free Lunch from Post-training: Progress Advantage for LLM Agents — Changdae Oh, Wendi Li et al.
+   https://arxiv.org/abs/2606.26080</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-06-26</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-06-26/episode.mp3" length="37034469" type="audio/mpeg"/>
+      <pubDate>Fri, 26 Jun 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-06-25</title>
       <description>本日の注目論文：
