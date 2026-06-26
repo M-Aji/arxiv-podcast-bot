@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Thu, 25 Jun 2026 22:35:54 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 26 Jun 2026 22:29:38 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-06-27</title>
+      <description>本日の注目論文：
+
+1. DanceOPD: On-Policy Generative Field Distillation — Wei Zhou, Xiongwei Zhu et al.
+   https://arxiv.org/abs/2606.27377
+2. Reinforcement Learning without Ground-Truth Solutions can Improve LLMs — Yingyu Lin, Qiyue Gao et al.
+   https://arxiv.org/abs/2606.27369
+3. Autoregressive Boltzmann Generators — Danyal Rehman, Charlie B. Tan et al.
+   https://arxiv.org/abs/2606.27361
+4. When are likely answers right? On Sequence Probability and Correctness in LLMs — Johannes Zenn, Jonas Geiping
+   https://arxiv.org/abs/2606.27359
+5. Error-Conditioned Neural Solvers — Haina Jiang, Liam Wang et al.
+   https://arxiv.org/abs/2606.27354</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-06-27</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-06-27/episode.mp3" length="32138863" type="audio/mpeg"/>
+      <pubDate>Sat, 27 Jun 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-06-26</title>
       <description>本日の注目論文：
