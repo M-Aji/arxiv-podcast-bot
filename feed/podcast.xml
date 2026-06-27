@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Fri, 26 Jun 2026 22:29:38 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 27 Jun 2026 22:17:53 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-06-28</title>
+      <description>本日の注目論文：
+
+1. Mapping Political-Elite Networks in Europe with a Multilingual Joint Entity-Relation Extraction Pipeline — Kirill Solovev, Jana Lasser
+   https://arxiv.org/abs/2606.27347
+2. Understanding Domain-Aware Distribution Alignment in Budgeted Entity Matching — Nicholas Pulsone, Gregory Goren et al.
+   https://arxiv.org/abs/2606.27342
+3. Language-Based Digital Twins for Elderly Cognitive Assistance — Mohammad Mehdi Hosseini, Mohammad H. Mahoor et al.
+   https://arxiv.org/abs/2606.27334
+4. Empowering GUI Agents via Autonomous Experience Exploration and Hindsight Experience Utilization for Task Planning — Tianyi Men, Zhuoran Jin et al.
+   https://arxiv.org/abs/2606.27330
+5. Hallucination in World Models is Predictable and Preventable — Nicklas Hansen, Xiaolong Wang
+   https://arxiv.org/abs/2606.27326</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-06-28</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-06-28/episode.mp3" length="32904826" type="audio/mpeg"/>
+      <pubDate>Sun, 28 Jun 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-06-27</title>
       <description>本日の注目論文：
