@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Sat, 27 Jun 2026 22:17:53 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 28 Jun 2026 22:21:00 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-06-29</title>
+      <description>本日の注目論文：
+
+1. Beyond the Hard Budget: Sparsity Regularizers for More Interpretable Top-k Sparse Autoencoders — Nathanaël Jacquier, Maria Vakalopoulou et al.
+   https://arxiv.org/abs/2606.27321
+2. LLM-Based Examination of Eligibility Criteria from Securities Prospectuses at the German Central Bank — Serhii Hamotskyi, Akash Kumar Gautam et al.
+   https://arxiv.org/abs/2606.27316
+3. Blackwell Approachability and Gradient Equilibrium are Equivalent — Brian W. Lee, Nika Haghtalab et al.
+   https://arxiv.org/abs/2606.27315
+4. Beyond Surface Forms: A Comprehensive, Mechanism-Oriented Taxonomy of Indirect Linguistic Encoding for LLM-Based Coded Language Detection — Hamid Reza Firoozfar, Mohammadsadegh Abolhasani et al.
+   https://arxiv.org/abs/2606.27314
+5. Multilingual Reasoning Cascades Need More Context — Arnav Mazumder, Dengjia Zhang et al.
+   https://arxiv.org/abs/2606.27306</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-06-29</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-06-29/episode.mp3" length="42520451" type="audio/mpeg"/>
+      <pubDate>Mon, 29 Jun 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-06-28</title>
       <description>本日の注目論文：
