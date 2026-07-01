@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Tue, 30 Jun 2026 22:30:33 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 01 Jul 2026 22:31:20 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-07-02</title>
+      <description>本日の注目論文：
+
+1. Introspective Coupling: Self-Explanation Training Tracks Behavioral Change Despite Fixed Supervision — Zifan Carl Guo, Laura Ruis et al.
+   https://arxiv.org/abs/2606.32038
+2. QVal: Cheaply Evaluating Dense Supervision Signals for Long-Horizon LLM Agents — Sergio Hernández-Gutiérrez, Matteo Merler et al.
+   https://arxiv.org/abs/2606.32034
+3. Reinforcement Learning with Metacognitive Feedback Elicits Faithful Uncertainty Expression in LLMs — Gabrielle Kaili-May Liu, Avi Caciularu et al.
+   https://arxiv.org/abs/2606.32032
+4. When LLMs Read Tables Carelessly: Measuring and Reducing Data Referencing Errors — Yuqing Yang, Qi Zhu et al.
+   https://arxiv.org/abs/2606.32029
+5. Freeform Preference Learning for Robotic Manipulation — Marcel Torne, Anubha Mahajan et al.
+   https://arxiv.org/abs/2606.32027</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-07-02</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-07-02/episode.mp3" length="22292303" type="audio/mpeg"/>
+      <pubDate>Thu, 02 Jul 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-07-01</title>
       <description>本日の注目論文：
