@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Wed, 01 Jul 2026 22:31:20 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 02 Jul 2026 22:21:40 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-07-03</title>
+      <description>本日の注目論文：
+
+1. Measuring the Gap Between Human and LLM Research Ideas — Ziyu Chen, Yilun Zhao et al.
+   https://arxiv.org/abs/2607.01233
+2. Is One Layer Enough? Training A Single Transformer Layer Can Match Full-Parameter RL Training — Zijian Zhang, Rizhen Hu et al.
+   https://arxiv.org/abs/2607.01232
+3. Language-Critique Imitation Learning from Suboptimal Demonstrations — Chih-Han Yang, Dai-Jie Wu et al.
+   https://arxiv.org/abs/2607.01225
+4. AutoMem: Automated Learning of Memory as a Cognitive Skill — Shengguang Wu, Hao Zhu et al.
+   https://arxiv.org/abs/2607.01224
+5. Theoria: Rewrite-Acceptability Verification over Informal Reasoning States — Ben Slivinski, Michael Saldivar
+   https://arxiv.org/abs/2607.01223</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-07-03</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-07-03/episode.mp3" length="27793226" type="audio/mpeg"/>
+      <pubDate>Fri, 03 Jul 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-07-02</title>
       <description>本日の注目論文：
