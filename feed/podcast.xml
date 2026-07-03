@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Thu, 02 Jul 2026 22:21:40 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 03 Jul 2026 22:22:28 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-07-04</title>
+      <description>本日の注目論文：
+
+1. Distributed Attacks in Persistent-State AI Control — Josh Hills, Ida Caspary et al.
+   https://arxiv.org/abs/2607.02514
+2. LACUNA: A Testbed for Evaluating Localization Precision for LLM Unlearning — Matteo Boglioni, Thibault Rousset et al.
+   https://arxiv.org/abs/2607.02513
+3. Program-as-Weights: A Programming Paradigm for Fuzzy Functions — Wentao Zhang, Liliana Hotsko et al.
+   https://arxiv.org/abs/2607.02512
+4. Online Safety Monitoring for LLMs — Mona Schirmer, Metod Jazbec et al.
+   https://arxiv.org/abs/2607.02510
+5. ReContext: Recursive Evidence Replay as LLM Harness for Long-Context Reasoning — Yanjun Zhao, Ruizhong Qiu et al.
+   https://arxiv.org/abs/2607.02509</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-07-04</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-07-04/episode.mp3" length="40461548" type="audio/mpeg"/>
+      <pubDate>Sat, 04 Jul 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-07-03</title>
       <description>本日の注目論文：
