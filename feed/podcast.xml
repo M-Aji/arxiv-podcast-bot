@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Fri, 03 Jul 2026 22:22:28 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 04 Jul 2026 22:13:16 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-07-05</title>
+      <description>本日の注目論文：
+
+1. What LLM Agents Say When No One Is Watching: Social Structure and Latent Objective Emergence in Multi-Agent Debates — Arman Ghaffarizadeh, Danyal Mohaddes et al.
+   https://arxiv.org/abs/2607.02507
+2. Reasoning LLM Improves Speaker Recognition in Long-form TV Dramas — Yuxuan Li, Lingxi Xie et al.
+   https://arxiv.org/abs/2607.02504
+3. DemoPSD: Disagreement-Modulated Policy Self-Distillation — Yunhe Li, Hao Shi et al.
+   https://arxiv.org/abs/2607.02502
+4. Beyond Adam: SOAP and Muon for Faster, Label-Efficient Training of Machine Learning Interatomic Potentials — Gil Harari, Yoel Zimmermann et al.
+   https://arxiv.org/abs/2607.02499
+5. Controllable Sim Agents with Behavior Latents — Juanwu Lu, Junyu Zhu et al.
+   https://arxiv.org/abs/2607.02496</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-07-05</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-07-05/episode.mp3" length="34828399" type="audio/mpeg"/>
+      <pubDate>Sun, 05 Jul 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-07-04</title>
       <description>本日の注目論文：
