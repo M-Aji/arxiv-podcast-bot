@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Sat, 04 Jul 2026 22:13:16 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 06 Jul 2026 22:29:55 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-07-07</title>
+      <description>本日の注目論文：
+
+1. Towards Robustness against Typographic Attack with Training-free Concept Localization — Bohan Liu, Wenqian Ye et al.
+   https://arxiv.org/abs/2607.02494
+2. G-RRM: Guiding Symbolic Solvers with Recurrent Reasoning Models — Timo Bertram, Sidhant Bhavnani et al.
+   https://arxiv.org/abs/2607.02491
+3. Visually Grounded Self-Reflection for Vision-Language Models via Reinforcement Learning — Liyan Tang, Fangcong Yin et al.
+   https://arxiv.org/abs/2607.02490
+4. Combating Textual Noise and Redundancy: Entropy-Aware Dense Visual Token Pruning — Xuehui Wang, Xuankun Yang et al.
+   https://arxiv.org/abs/2607.02484
+5. Audio-Based Understanding of Audiobook Narration Appeal — Shahar Elisha, Mariano Beguerisse-Díaz et al.
+   https://arxiv.org/abs/2607.02473</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-07-07</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-07-07/episode.mp3" length="33007917" type="audio/mpeg"/>
+      <pubDate>Tue, 07 Jul 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-07-05</title>
       <description>本日の注目論文：
