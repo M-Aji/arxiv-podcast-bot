@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Mon, 06 Jul 2026 22:29:55 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 07 Jul 2026 22:26:35 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-07-08</title>
+      <description>本日の注目論文：
+
+1. From Fixed to Free Cameras: Calibration-Free View-Robust Vision-Language-Action Model — Wenhao Li, Xueying Jiang et al.
+   https://arxiv.org/abs/2607.05396
+2. Weak-to-Strong Generalization via Direct On-Policy Distillation — Shiyuan Feng, Huan-ang Gao et al.
+   https://arxiv.org/abs/2607.05394
+3. Interpretable Human-Label-Free Deep Learning for Real-Bogus Classification with Uncertainty Quantification — Raphaël Bonnet-Guerrini, Bruno Sanchez et al.
+   https://arxiv.org/abs/2607.05393
+4. LLM-as-a-Verifier: A General-Purpose Verification Framework — Jacky Kwok, Shulu Li et al.
+   https://arxiv.org/abs/2607.05391
+5. Search Beyond What Can Be Taught: Evolving the Knowledge Boundary in Agentic Visual Generation — Haozhe Wang, Weijia Feng et al.
+   https://arxiv.org/abs/2607.05382</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-07-08</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-07-08/episode.mp3" length="36609919" type="audio/mpeg"/>
+      <pubDate>Wed, 08 Jul 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-07-07</title>
       <description>本日の注目論文：
