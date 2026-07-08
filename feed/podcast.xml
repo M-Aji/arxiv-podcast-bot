@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Tue, 07 Jul 2026 22:26:35 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 08 Jul 2026 22:23:42 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-07-09</title>
+      <description>本日の注目論文：
+
+1. ELSA3D: Elastic Semantic Anchoring for Unified 3D Understanding and Generation — Tianjiao Yu, Xinzhuo Li et al.
+   https://arxiv.org/abs/2607.06565
+2. Graph Convolutional Attention: A Spectral Perspective on Graph Denoising and Diffusion — Shervin Khalafi, Igor Krawczuk et al.
+   https://arxiv.org/abs/2607.06546
+3. Rethinking Indic AI from a Lens of Cultural Heritage Preservation — Aparna Madva, Sharath Srivatsa et al.
+   https://arxiv.org/abs/2607.06544
+4. On the feasibility of dependency parsing of non-human sequences without a gold standard. Is evaluation possible in other species? — Ramon Ferrer-i-Cancho, Catherine Hobaiter et al.
+   https://arxiv.org/abs/2607.06542
+5. Hierarchical Acoustic-Semantic Modeling: Modality Separation and Semantic Coherence for Full-Duplex SLMs — Zhenyu Liu, Yunxin Li et al.
+   https://arxiv.org/abs/2607.06540</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-07-09</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-07-09/episode.mp3" length="29264725" type="audio/mpeg"/>
+      <pubDate>Thu, 09 Jul 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-07-08</title>
       <description>本日の注目論文：
