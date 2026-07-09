@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Wed, 08 Jul 2026 22:23:42 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 09 Jul 2026 22:38:15 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-07-10</title>
+      <description>本日の注目論文：
+
+1. Accurate, Interdisciplinary and Transparent Structure-property Understanding with Deep Native Structural Reasoning — Chen Tang, Yizhou Wang et al.
+   https://arxiv.org/abs/2607.07708
+2. Co-LMLM: Continuous-Query Limited Memory Language Models — Yair Feldman, Linxi Zhao et al.
+   https://arxiv.org/abs/2607.07707
+3. The Key to Going Linear: Analysis-Driven Transformer Linearization — Anna Kuzina, Paul N. Whatmough et al.
+   https://arxiv.org/abs/2607.07706
+4. From Noisy Traces to Root Causes: Structural Trajectory Analysis and Causal Extraction for Agent Optimization — Ying Chang, Jiahang Xu et al.
+   https://arxiv.org/abs/2607.07702
+5. Breaking Database Lock-in: Agentic Regeneration of High Performance Storage Readers for Database Bypass — Victor Giannakouris, Immanuel Trummer
+   https://arxiv.org/abs/2607.07696</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-07-10</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-07-10/episode.mp3" length="28656404" type="audio/mpeg"/>
+      <pubDate>Fri, 10 Jul 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-07-09</title>
       <description>本日の注目論文：
