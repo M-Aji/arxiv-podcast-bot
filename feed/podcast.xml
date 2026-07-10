@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Thu, 09 Jul 2026 22:38:15 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 10 Jul 2026 22:22:03 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-07-11</title>
+      <description>本日の注目論文：
+
+1. UniClawBench: A Universal Benchmark for Proactive Agents on Real-World Tasks — Zhekai Chen, Chengqi Duan et al.
+   https://arxiv.org/abs/2607.08768
+2. OpenCoF: Learning to Reason Through Video Generation — Xinyan Chen, Ziyu Guo et al.
+   https://arxiv.org/abs/2607.08763
+3. Ideas Have Genomes: Benchmarking Scientific Lineage Reasoning and Lineage-Grounded Idea Generation — Yifan Zhou, Qihao Yang et al.
+   https://arxiv.org/abs/2607.08758
+4. Score Accuracy Along the Forward Diffusion Does Not Certify Numerical Stability in Diffusion Sampling — Yiwei Zhou
+   https://arxiv.org/abs/2607.08757
+5. MulTTiPop: A Multitrack Transcription Dataset for Pop Music — Nathan Pruyne, Benjamin Stoler et al.
+   https://arxiv.org/abs/2607.08756</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-07-11</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-07-11/episode.mp3" length="42214049" type="audio/mpeg"/>
+      <pubDate>Sat, 11 Jul 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-07-10</title>
       <description>本日の注目論文：
