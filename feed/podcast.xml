@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Sat, 11 Jul 2026 22:07:13 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 12 Jul 2026 22:07:40 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-07-13</title>
+      <description>本日の注目論文：
+
+1. Workflow as Knowledge: Semantic Persistence for LLM-Mediated Workflows — Emanuele Quinto, Carlo Andrea Rozzi et al.
+   https://arxiv.org/abs/2607.08740
+2. The Illusion of Equivalency: Statistical Characterization of Quantization Effects in LLMs — Baha Rababah, Cuneyt Gurcan Akcora et al.
+   https://arxiv.org/abs/2607.08734
+3. Super Weights in LLMs and the Failure of Selective Training — Shreyas Subramanian, Adewale Akinfaderin et al.
+   https://arxiv.org/abs/2607.08733
+4. Validity of LLMs as data annotators: AMALIA on authority — Manuel Pita
+   https://arxiv.org/abs/2607.08731
+5. Pose-to-Biomechanics: Bridging 3D Human Pose Estimation and Biomechanical Attribute Prediction — Ayda Eghbalian, Kevin Desai
+   https://arxiv.org/abs/2607.08725</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-07-13</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-07-13/episode.mp3" length="29505271" type="audio/mpeg"/>
+      <pubDate>Mon, 13 Jul 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-07-12</title>
       <description>本日の注目論文：
