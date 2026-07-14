@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Mon, 13 Jul 2026 22:12:35 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 14 Jul 2026 22:15:25 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-07-15</title>
+      <description>本日の注目論文：
+
+1. Requential Coding: Pushing the Limits of Model Compression with Self-Generated Training Data — Shikai Qiu, Marc Finzi et al.
+   https://arxiv.org/abs/2607.11883
+2. Metacognition in LLMs: Foundations, Progress, and Opportunities — Gabrielle Kaili-May Liu, Areeb Gani et al.
+   https://arxiv.org/abs/2607.11881
+3. Invariant Learning Dynamics of Transformers in Inductive Reasoning Tasks — Tiberiu Musat, Tiago Pimentel et al.
+   https://arxiv.org/abs/2607.11875
+4. A Minimalist Retargeting-Guided Reinforcement Learning Recipe for Dexterous Manipulation — Yunhai Feng, Natalie Leung et al.
+   https://arxiv.org/abs/2607.11874
+5. A Durability and Cross-Language Transfer Benchmark for a Validated Teaching-Feedback Classification Protocol — Esteban U. Vega Barajas
+   https://arxiv.org/abs/2607.11873</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-07-15</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-07-15/episode.mp3" length="29098019" type="audio/mpeg"/>
+      <pubDate>Wed, 15 Jul 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-07-14</title>
       <description>本日の注目論文：
