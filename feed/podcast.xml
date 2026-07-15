@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Tue, 14 Jul 2026 22:15:25 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 15 Jul 2026 22:19:06 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-07-16</title>
+      <description>本日の注目論文：
+
+1. Do AI Agents Know When a Task Is Simple? Toward Complexity-Aware Reasoning and Execution — Junjie Yin, Xinyu Feng
+   https://arxiv.org/abs/2607.13034
+2. The Seriality Gap in Video Diffusion Models — Jorge Diaz Chao, Konpat Preechakul et al.
+   https://arxiv.org/abs/2607.13031
+3. TerraZero: Procedural Driving Simulation for Zero-Demonstration Self-Play at Scale — Zhouchonghao Wu, Akshay Rangesh et al.
+   https://arxiv.org/abs/2607.13028
+4. PalmClaw: A Native On-Device Agent Framework for Mobile Phones — Hongru Cai, Yongqi Li et al.
+   https://arxiv.org/abs/2607.13027
+5. A Shortcut to Statistically Steady-State Turbulence with Flow Matching — Gianluca Galletti, Gerald Gutenbrunner et al.
+   https://arxiv.org/abs/2607.13022</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-07-16</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-07-16/episode.mp3" length="35334260" type="audio/mpeg"/>
+      <pubDate>Thu, 16 Jul 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-07-15</title>
       <description>本日の注目論文：
