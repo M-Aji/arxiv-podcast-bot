@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Wed, 15 Jul 2026 22:19:06 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 16 Jul 2026 22:19:34 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-07-17</title>
+      <description>本日の注目論文：
+
+1. Leveraging unlabelled data for generalizable neural population decoding — Ximeng Mao, Nanda H. Krishna et al.
+   https://arxiv.org/abs/2607.14086
+2. Linear Independent Component Analysis via Optimal Transport — Ashutosh Jha, Michel Besserve et al.
+   https://arxiv.org/abs/2607.14081
+3. MetaPerch: Learning from metadata for bioacoustics foundation models — Mustafa Chasmai, Vincent Dumoulin et al.
+   https://arxiv.org/abs/2607.14072
+4. Screening of Biosecurity Features in Metagenomic Data with Evo 2 Probes — Jeremy Guntoro, Alexander Dack et al.
+   https://arxiv.org/abs/2607.14070
+5. Hindcast: Replaying Prediction Markets to Evaluate LLM Forecasters — Xiao Ye, Jacob Dineen et al.
+   https://arxiv.org/abs/2607.14051</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-07-17</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-07-17/episode.mp3" length="30100146" type="audio/mpeg"/>
+      <pubDate>Fri, 17 Jul 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-07-16</title>
       <description>本日の注目論文：
