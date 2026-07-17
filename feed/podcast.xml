@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Thu, 16 Jul 2026 22:19:34 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 17 Jul 2026 22:09:53 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-07-18</title>
+      <description>本日の注目論文：
+
+1. Partition, Prompt, Aggregate: Statistical Self-Consistency in Language Models — Patrik Wolf, Thomas Kleine Buening et al.
+   https://arxiv.org/abs/2607.15277
+2. RoboTTT: Context Scaling for Robot Policies — Yunfan Jiang, Yevgen Chebotar et al.
+   https://arxiv.org/abs/2607.15275
+3. MeanFlowNFT: Bringing Forward-Process RL to Average-Velocity Generators — Yushi Huang, Xiangxin Zhou et al.
+   https://arxiv.org/abs/2607.15273
+4. SciDiagramEdit: Learning to Edit Scientific Diagrams from Paper Revisions — Yasheng Sun, Zezi Zeng et al.
+   https://arxiv.org/abs/2607.15272
+5. Online Neural Space Time Memory for Dynamic Novel View Synthesis — Baback Elmieh, Lynn Tsai et al.
+   https://arxiv.org/abs/2607.15271</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-07-18</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-07-18/episode.mp3" length="32988494" type="audio/mpeg"/>
+      <pubDate>Sat, 18 Jul 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-07-17</title>
       <description>本日の注目論文：
