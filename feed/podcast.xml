@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Fri, 17 Jul 2026 22:09:53 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 18 Jul 2026 22:04:27 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-07-19</title>
+      <description>本日の注目論文：
+
+1. Pretraining Data Can Be Poisoned through Computational Propaganda — Victoria Graf, Hannaneh Hajishirzi et al.
+   https://arxiv.org/abs/2607.15267
+2. SceneBind: Binding What and Where Across Vision, Audio and Language — Mingfei Chen, Zijun Cui et al.
+   https://arxiv.org/abs/2607.15265
+3. Beyond Success Rate: Cost-Aware Evaluation of Offensive and Defensive Security Agents — Paul Kassianik, Blaine Nelson et al.
+   https://arxiv.org/abs/2607.15263
+4. Decoding Market Emotion from Blockchain Activity: A Data-Driven Sentiment Classifier — Arthur G. Bubolz, Abreu Quevedo et al.
+   https://arxiv.org/abs/2607.15258
+5. SearchOS-V1: Towards Robust Open-Domain Information-Seeking Agent Collaboration — Yuyao Zhang, Junjie Gao et al.
+   https://arxiv.org/abs/2607.15257</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-07-19</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-07-19/episode.mp3" length="21509059" type="audio/mpeg"/>
+      <pubDate>Sun, 19 Jul 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-07-18</title>
       <description>本日の注目論文：
