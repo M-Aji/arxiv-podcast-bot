@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Sat, 18 Jul 2026 22:04:27 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 19 Jul 2026 22:09:12 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-07-20</title>
+      <description>本日の注目論文：
+
+1. teLLMe Why (Ain't Nothing but a Jam): Exploratory Causal Analysis of Urban Driving Data — Qiwei Li, Jorge Ortiz
+   https://arxiv.org/abs/2607.15254
+2. Bridge Evidence: Static Retrieval Utility Does Not Predict Causal Utility in Multi-Step Agentic Search — Debayan Mukhopadhyay, Utshab Kumar Ghosh et al.
+   https://arxiv.org/abs/2607.15253
+3. Equivalence of the Compton and Bethe-Feynman Yield Formulas — Edwin Lyman
+   https://arxiv.org/abs/2607.15250
+4. AutoSynthesis: An agentic system for automated meta-analysis — Moein Taherinezhad, Sebastian Maier et al.
+   https://arxiv.org/abs/2607.15247
+5. Mutable Low-Rank Sketches for Retrain-Free Recommendation — Hector J. Garcia, Nick Clayton
+   https://arxiv.org/abs/2607.15242</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-07-20</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-07-20/episode.mp3" length="40919714" type="audio/mpeg"/>
+      <pubDate>Mon, 20 Jul 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-07-19</title>
       <description>本日の注目論文：
