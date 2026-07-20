@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Sun, 19 Jul 2026 22:09:12 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 20 Jul 2026 22:19:03 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-07-21</title>
+      <description>本日の注目論文：
+
+1. PagedWeight: Efficient MoE LLM Serving with Dynamic Quality-Aware Weight Quantization — Yuchen Yang, Yifan Zhao et al.
+   https://arxiv.org/abs/2607.16184
+2. A Blueprint for Equilibrium-Based Differentiable Continuous-Variable Thermodynamic Computing — Owen Lockwood, Jérémy Béjanin et al.
+   https://arxiv.org/abs/2607.16183
+3. Cluster-Aware Matching via Laplacian Optimal Transport — Gabriel Samberg, YoonHaeng Hur et al.
+   https://arxiv.org/abs/2607.16178
+4. Physics-enhanced reinforcement learning for real-time optimal control of dynamical systems — Matteo Tomasetto, Nicolò Botteghi et al.
+   https://arxiv.org/abs/2607.16177
+5. Evaluating Open-Weight LLMs for Generating Structured Threat Information for Autonomous Vehicle Vulnerabilities — Md Erfan, Ahmed Ryan et al.
+   https://arxiv.org/abs/2607.16175</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-07-21</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-07-21/episode.mp3" length="38056019" type="audio/mpeg"/>
+      <pubDate>Tue, 21 Jul 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-07-20</title>
       <description>本日の注目論文：
