@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Mon, 20 Jul 2026 22:19:03 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 21 Jul 2026 22:19:20 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-07-22</title>
+      <description>本日の注目論文：
+
+1. The Many Senses of Visual Similarity: A Text-Prompted Image Perceptual Metric — Sheng-Yu Wang, Yotam Nitzan et al.
+   https://arxiv.org/abs/2607.18237
+2. Patch Policy: Efficient Embodied Control via Dense Visual Representations — Gaoyue Zhou, Zichen Jeff Cui et al.
+   https://arxiv.org/abs/2607.18236
+3. Automated Discovery Has No Universally Superior Harness — Akshat Gupta, Jermaine Lei et al.
+   https://arxiv.org/abs/2607.18235
+4. It's Not What You Say, It's How You Say It: Evaluating LLM Responses to Expressions of Belief — Kevin Du, Clara Kümpel et al.
+   https://arxiv.org/abs/2607.18232
+5. Simple Domain Generalization for Strong Pixel-Level Image Tampering Detection in Modern VLMs — Yi Tang, Xinyi Shang et al.
+   https://arxiv.org/abs/2607.18230</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-07-22</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-07-22/episode.mp3" length="29819144" type="audio/mpeg"/>
+      <pubDate>Wed, 22 Jul 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-07-21</title>
       <description>本日の注目論文：
