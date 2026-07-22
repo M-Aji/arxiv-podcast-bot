@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Tue, 21 Jul 2026 22:19:20 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 22 Jul 2026 22:19:05 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-07-23</title>
+      <description>本日の注目論文：
+
+1. Copy Less, Ground More: Overcoming Repetitive Copying in Long-Context Reasoning via Evidence-Aware Reinforcement Learning — Lizhe Fang, Weizhou Shen et al.
+   https://arxiv.org/abs/2607.19345
+2. Appearance Pointers -- Multimodal Region Control of Diffusion Transformers — Rahul Sajnani, Yulia Gryaditskaya et al.
+   https://arxiv.org/abs/2607.19344
+3. CodeRescue: Budget-Calibrated Recovery Routing for Coding Agents — Qijia He, Jiayi Cheng et al.
+   https://arxiv.org/abs/2607.19338
+4. Agents in the Wild: Where Research Meets Deployment — Grace Hui Yang, Pranav N. Venkit et al.
+   https://arxiv.org/abs/2607.19336
+5. 1-Lipschitz Neural Networks on Hadamard Manifolds — Davide Murari, Marta Ghirardelli et al.
+   https://arxiv.org/abs/2607.19335</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-07-23</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-07-23/episode.mp3" length="31254785" type="audio/mpeg"/>
+      <pubDate>Thu, 23 Jul 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-07-22</title>
       <description>本日の注目論文：
