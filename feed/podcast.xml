@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Wed, 22 Jul 2026 22:19:05 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 23 Jul 2026 22:22:13 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-07-24</title>
+      <description>本日の注目論文：
+
+1. Lipschitzian SLLNs for random functions — Lai Tian, Johannes O. Royset
+   https://arxiv.org/abs/2607.20411
+2. LKValues: Aligning Large Language Models with Sri Lankan Societal Values — Nethmi Muthugala,  Supryadi et al.
+   https://arxiv.org/abs/2607.20410
+3. SoftReason: A Fully Differentiable Neuro-Soft-Symbolic Deductive Reasoning Architecture over High-Dimensional Perceptual Data — Wael AbdAlmageed
+   https://arxiv.org/abs/2607.20402
+4. Towards Miniature Humanoid Tele-Loco-Manipulation Using Virtual Reality and Reinforcement Learning — Nicolas Kosanovic, Jordan Dowdy et al.
+   https://arxiv.org/abs/2607.20399
+5. Persian Pixel: A large-scale synthetic OCR dataset for Persian language — Pouria Mahdi, Haq Nawaz Malik
+   https://arxiv.org/abs/2607.20385</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-07-24</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-07-24/episode.mp3" length="24615658" type="audio/mpeg"/>
+      <pubDate>Fri, 24 Jul 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-07-23</title>
       <description>本日の注目論文：
