@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Thu, 23 Jul 2026 22:22:13 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 24 Jul 2026 22:19:10 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-07-25</title>
+      <description>本日の注目論文：
+
+1. 3D-Aware VLMs with Implicit and Explicit Geometries — Wenhao Li, Xueying Jiang et al.
+   https://arxiv.org/abs/2607.21595
+2. Expanding Flow Maps — Sophia Tang, Pranam Chatterjee
+   https://arxiv.org/abs/2607.21585
+3. GraphVid: Interactive Graph-Controllable Video Generation — Vedant Shah, Onkar Susladkar et al.
+   https://arxiv.org/abs/2607.21580
+4. Barzilai-Borwein Fails Superlinear Convergence on an Open Set of Quadratics for Every Dimension $n\geq 4$ — Dawei Li, Xiaotian Jiang et al.
+   https://arxiv.org/abs/2607.21579
+5. Synthetic data generation framework for quality control automation in gravure printing — Korota Arsène Coulibaly, Mohamed Hamlich et al.
+   https://arxiv.org/abs/2607.21577</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-07-25</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-07-25/episode.mp3" length="37195829" type="audio/mpeg"/>
+      <pubDate>Sat, 25 Jul 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-07-24</title>
       <description>本日の注目論文：
