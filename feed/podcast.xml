@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Fri, 24 Jul 2026 22:19:10 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 26 Jul 2026 22:24:22 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-07-27</title>
+      <description>本日の注目論文：
+
+1. Surprisal Theory is Tautological (without Rational Grounding) — Ryan Cotterell
+   https://arxiv.org/abs/2607.21574
+2. Beyond Sufficiency: Time Series Explanation with Counterfactual Necessity — Hongnan Ma, Yiwei Shi et al.
+   https://arxiv.org/abs/2607.21573
+3. MedGame: Storytelling Gamification Empowered by Large Language Models for Medical Education — Qian Wu, Xinrong Zhou et al.
+   https://arxiv.org/abs/2607.21570
+4. Graph Learning on Ensembles of Cyclic Peptides: An Investigation of Molecular Ensemble Modeling — Aaron Feller, Kris Deibler et al.
+   https://arxiv.org/abs/2607.21561
+5. Unsupervised Consensus-Based Anomaly Detection for Spatiotemporal Malaria Incidence in Ghana — T. Ansah-Narh, Y. Asare Afrane
+   https://arxiv.org/abs/2607.21559</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-07-27</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-07-27/episode.mp3" length="36719103" type="audio/mpeg"/>
+      <pubDate>Mon, 27 Jul 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-07-25</title>
       <description>本日の注目論文：
