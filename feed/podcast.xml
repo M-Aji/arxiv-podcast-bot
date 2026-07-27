@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Sun, 26 Jul 2026 22:24:22 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 27 Jul 2026 22:25:55 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-07-28</title>
+      <description>本日の注目論文：
+
+1. SM4RT: Learning Structured Motion Geometry for 4D Reconstruction — Shing Ho J. Lin, Wenzhao Zheng et al.
+   https://arxiv.org/abs/2607.22534
+2. Skill Self-Play: Pushing the Frontier of LLM Capability with Co-Evolving Skills — Siyuan Huang, Pengyu Cheng et al.
+   https://arxiv.org/abs/2607.22529
+3. Explainable Reinforcement Learning for assisting Air Traffic Controllers — Anduel Mehmeti, Gabriella Gigante et al.
+   https://arxiv.org/abs/2607.22525
+4. Gridnberg: A Topography-Aware Pedestrian Routing Dataset for New York City — Ariel Noyman
+   https://arxiv.org/abs/2607.22523
+5. The Regression Tax: Decomposing Why Skills Help and Hurt LLM Agents — Darshan Tank, Baran Nama
+   https://arxiv.org/abs/2607.22520</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-07-28</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-07-28/episode.mp3" length="31319030" type="audio/mpeg"/>
+      <pubDate>Tue, 28 Jul 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-07-27</title>
       <description>本日の注目論文：
