@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Mon, 27 Jul 2026 22:25:55 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 28 Jul 2026 22:19:40 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-07-29</title>
+      <description>本日の注目論文：
+
+1. ClinFusion: A Vision-Centric Multimodal LLM System for Holistic Medical Understanding — Hangjie Yuan, Yichen Qian et al.
+   https://arxiv.org/abs/2607.24743
+2. Certified Parallel-in-Time Sinkhorn for Dynamic Entropic Optimal Transport — Xinyang Wen
+   https://arxiv.org/abs/2607.24741
+3. Learning Distributions from Multiple Data Providers — Jon Kleinberg, Amin Saberi et al.
+   https://arxiv.org/abs/2607.24732
+4. Rethinking Classifier-Free Guidance in On-Policy Diffusion Distillation — Bingnan Li, Haozhe Wang et al.
+   https://arxiv.org/abs/2607.24731
+5. KANEx: Translating Kolmogorov-Arnold Networks' Interpretability to Medical Explainability — Krithi Shailya, Ananya Lakshmi Ravi et al.
+   https://arxiv.org/abs/2607.24730</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-07-29</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-07-29/episode.mp3" length="35043662" type="audio/mpeg"/>
+      <pubDate>Wed, 29 Jul 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-07-28</title>
       <description>本日の注目論文：
