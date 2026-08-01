@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Fri, 31 Jul 2026 22:20:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 01 Aug 2026 22:10:23 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-08-02</title>
+      <description>本日の注目論文：
+
+1. OSReward: Instituting Standardized Evaluation for Cross-Platform Computer-Use Reward Models — Qiushi Sun, Kanzhi Cheng et al.
+   https://arxiv.org/abs/2607.28609
+2. KAISEN: Reproducible Subgroup Fairness Auditing for Clinical Risk Models — Sparsh Roy, Samuel Girmachew et al.
+   https://arxiv.org/abs/2607.28608
+3. Inducing language models to assert their own consciousness restores human beliefs and values — Junsol Kim, Winnie Street et al.
+   https://arxiv.org/abs/2607.28607
+4. Using Theory of Mind to Arbitrate between Social and Non-social Learning — Lance Ying, Ryan Truong et al.
+   https://arxiv.org/abs/2607.28601
+5. Change2Task: From Repository Changes to Executable Coding Agent Tasks and Environments — Haomin Qi, Xingliang Wang et al.
+   https://arxiv.org/abs/2607.28591</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-08-02</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-08-02/episode.mp3" length="30855722" type="audio/mpeg"/>
+      <pubDate>Sun, 02 Aug 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-08-01</title>
       <description>本日の注目論文：
