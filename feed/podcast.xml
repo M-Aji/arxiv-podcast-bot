@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Sat, 01 Aug 2026 22:10:23 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 02 Aug 2026 22:10:23 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-08-03</title>
+      <description>本日の注目論文：
+
+1. VAD: Attributing Visual Evidence for Target Reconstruction in Multimodal On-Policy Distillation — Kangning Zhang, Yixing Li et al.
+   https://arxiv.org/abs/2607.28590
+2. MixFrag: Fragility-Guided Mixed-Precision Post-Training Quantization for Vision Transformers — Md. Mehrab Hossain Opi, Robiul Islam Ryad et al.
+   https://arxiv.org/abs/2607.28589
+3. PAIChecker: Uncovering and Checking PR-Issue Misalignment in SWE-Bench-Like Benchmarks — Manyi Wang, Junjielong Xu et al.
+   https://arxiv.org/abs/2607.28587
+4. $β$-OPSD: Deriving with Policy Optimization, Training with Self-Distillation — Jiawei Xu, Minghui Liu et al.
+   https://arxiv.org/abs/2607.28582
+5. DualG-MRAG: Decoupling Macro-Reasoning and Micro-Matching for Multimodal Retrieval-Augmented Generation — Jiacheng Tao, Qingyun Sun et al.
+   https://arxiv.org/abs/2607.28580</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-08-03</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-08-03/episode.mp3" length="40894315" type="audio/mpeg"/>
+      <pubDate>Mon, 03 Aug 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-08-02</title>
       <description>本日の注目論文：
