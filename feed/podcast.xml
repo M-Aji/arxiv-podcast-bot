@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Sun, 02 Aug 2026 22:10:23 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 03 Aug 2026 22:25:48 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-08-04</title>
+      <description>本日の注目論文：
+
+1. TokTier: Exact Stateful Tokenization for Agentic LLM Serving — Zhenyu Zhang, Zhichao Cao
+   https://arxiv.org/abs/2607.29678
+2. ExtractBench: A Benchmark for Schema-Guided Enterprise Document Extraction — Boyang Zhang, Adrian Lyjak et al.
+   https://arxiv.org/abs/2607.29677
+3. Differentially Private Nonparametric Modal Learning with Applications to Regression and Clustering — Arkajyoti Bhattacharjee, Arnab Auddy
+   https://arxiv.org/abs/2607.29675
+4. Sign compression for Muon: SignMuon, MuonSign, and the Limits of Error Feedback — Maria Smirnova, Alexey Kravatskiy
+   https://arxiv.org/abs/2607.29674
+5. Freeze, Then Select: Structured Field Adapters and Stability-Validated Weak Selection for PDE Discovery from Sparse Observations — Juncheng Zhong, Chenghuang Shen et al.
+   https://arxiv.org/abs/2607.29665</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-08-04</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-08-04/episode.mp3" length="37536595" type="audio/mpeg"/>
+      <pubDate>Tue, 04 Aug 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-08-03</title>
       <description>本日の注目論文：
