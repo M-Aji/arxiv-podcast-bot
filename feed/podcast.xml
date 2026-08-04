@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Mon, 03 Aug 2026 22:25:48 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 04 Aug 2026 22:29:15 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-08-05</title>
+      <description>本日の注目論文：
+
+1. AURORA-LM: Autoencoding Unified Representation for Continuous-Latent Diffusion Language Modeling — Jiajun Liang, Yucheng Liao et al.
+   https://arxiv.org/abs/2608.02602
+2. Bridging Artificial Intelligence and Power Systems Education Using a Hands-On Executable Framework — Junjie Yin, Buxin She et al.
+   https://arxiv.org/abs/2608.02599
+3. onepot-Bench 0: towards lab-aware in silico chemistry benchmarks — Brandon Wang, Andrei S. Tyrin et al.
+   https://arxiv.org/abs/2608.02595
+4. The Condition-Number Barrier in Sparse Least Squares — Honghao Lin, Vahab Mirrokni et al.
+   https://arxiv.org/abs/2608.02588
+5. GradCuit: Credit-Assigned Gradient Flow Enables Robust and Interpretable Test-Time Latent Reasoning — Zhaoxin Yu, Qi Shen et al.
+   https://arxiv.org/abs/2608.02585</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-08-05</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-08-05/episode.mp3" length="35891783" type="audio/mpeg"/>
+      <pubDate>Wed, 05 Aug 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-08-04</title>
       <description>本日の注目論文：
