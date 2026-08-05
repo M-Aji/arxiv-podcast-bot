@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Tue, 04 Aug 2026 22:29:15 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 05 Aug 2026 22:28:00 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-08-06</title>
+      <description>本日の注目論文：
+
+1. ParVL: Parallel Scaling and Expandable Compute Allocation for Multimodal LLMs — Yang Yang, Qinyu Zhao et al.
+   https://arxiv.org/abs/2608.04010
+2. SocietyBench: Forecasting Counterfactual Social-World Evolution — Zhenran Wang, Zhonghan Bian et al.
+   https://arxiv.org/abs/2608.04009
+3. WorldCup Arena: Prospective, Leakage-Free Evaluation of Frontier LLMs on a Live Tournament — Zhenran Wang, Zhonghan Bian et al.
+   https://arxiv.org/abs/2608.04008
+4. TurnSight: Turn-Level Hindsight Self-Distillation for Tool-Integrated Reasoning — Changle Qu, Sunhao Dai et al.
+   https://arxiv.org/abs/2608.04007
+5. PAST-Bench: Benchmarking the Foundations of Recursive Self-Improvement in Personal Agents — Shuhan Xue, Zixin Ding et al.
+   https://arxiv.org/abs/2608.04003</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-08-06</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-08-06/episode.mp3" length="30209322" type="audio/mpeg"/>
+      <pubDate>Thu, 06 Aug 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-08-05</title>
       <description>本日の注目論文：
