@@ -13,12 +13,31 @@
       <link>https://m-aji.github.io/arxiv-podcast-bot/feed/podcast.xml</link>
     </image>
     <language>ja</language>
-    <lastBuildDate>Wed, 05 Aug 2026 22:28:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 07 Aug 2026 01:27:22 +0000</lastBuildDate>
     <itunes:author>M-Aji</itunes:author>
     <itunes:category text="Technology"/>
     <itunes:image href="https://m-aji.github.io/arxiv-podcast-bot/cover.png"/>
     <itunes:explicit>no</itunes:explicit>
     <itunes:summary>毎朝の arXiv 注目論文10本を、NotebookLM が日本語ポッドキャストで紹介。</itunes:summary>
+    <item>
+      <title>arXiv 2026-08-07</title>
+      <description>本日の注目論文：
+
+1. Stochastic Dynamics on Persistence Diagram Space via Reinforcement Learning — Farzana Nasrin
+   https://arxiv.org/abs/2608.06276
+2. The Illusion of Visual Tool-Use: A Causal Audit of Thinking with Images — Zhiheng Wang, Bo Peng et al.
+   https://arxiv.org/abs/2608.06270
+3. Improving the Realism of Synthetic Clinical Benchmarks Under Utility Constraints — Omid Bazgir, Md Nasir et al.
+   https://arxiv.org/abs/2608.06265
+4. OTLesMix: Wasserstein Barycenter and Optimal Transport Map for Synthetic Lesion Generation with Diverse Shapes and Locations — Robin Trombetta, Carole Lartizien
+   https://arxiv.org/abs/2608.06264
+5. Hypothesis Testing with Conditional Queries: Learnability and the Value of Interaction — Zonghuan Xu
+   https://arxiv.org/abs/2608.06262</description>
+      <guid isPermaLink="false">arxiv-podcast-2026-08-07</guid>
+      <enclosure url="https://github.com/M-Aji/arxiv-podcast-bot/releases/download/2026-08-07/episode.mp3" length="31057451" type="audio/mpeg"/>
+      <pubDate>Fri, 07 Aug 2026 06:00:00 +0900</pubDate>
+      <itunes:explicit>no</itunes:explicit>
+    </item>
     <item>
       <title>arXiv 2026-08-06</title>
       <description>本日の注目論文：
